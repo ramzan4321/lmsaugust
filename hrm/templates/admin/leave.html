@@ -1,0 +1,94 @@
+{% extends 'layouts/base.html' %} {% load crispy_forms_tags %} {% block content %}
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="/static/css/button.css">
+{% endblock stylesheets %}
+
+  <div class="container-fluid " style=" border-radius: 10px; height:650px">
+    <div class="row mt-3">
+      <div class="col">
+        <div class="card shadow mt-3"style= height:600px >
+          <div class="card-header border-0 ">
+            <div class="row align-items-center">
+              <div class="col-8">
+                <h3 class="text-dark mb-0">Leave List</h3>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive ml-2 mr-2 mt-4" style=" overflow:hidden;overflow-y: scroll;height: 500px;">
+            <table class=" table-hover table align-items-center table-flush">
+              <thead class=thead-light>
+                <tr>
+                  <th scope="col">Image</th>
+                  <th scope="col">Employee name</th>
+                  <th scope="col">Leave Reason</th>
+                  <th scope="col">Total Leave Days</th>
+                  <th scope="col">Leave Date</th>
+                  <th scope="col">Leave Type</th>
+                  <th scope="col">Leave Status</th>
+                  <th scope="col">Action</th>
+                </tr>
+
+              </thead>
+              <tbody>
+                {% for leave in leaves%}
+                <tr>
+
+                  <td class="py-1">
+                    <span class="avatar avatar-sm rounded-circle">
+                      <img src="{{ leave.employee_id.profile_image.url }}"/>
+                    </span>
+                  </td>
+                  <td>
+                    {{leave.employee_id.name}}
+                  </td>
+                  <td class="leavereson" style="word-wrap: break-word; word-break: break-all;white-space: normal;">
+                    {{leave.leave_reason}}
+                  </td>
+                  <td>
+                    {{leave.leave_days}}
+                  </td>
+                  <td>
+                    {{leave.leave_start_date}}
+                  </td>
+                  <td>
+                    {{leave.leave_type}}
+                  </td>
+                  <td>
+                    {{leave.status}}
+                  </td>
+                  <td>
+                    <div>
+                      <div style="display:inline-block;">
+                        <form method="POST" action="/leave/" >
+                          {% csrf_token %}
+                          <input type="hidden" value="approve" name="action">
+                          <input type="hidden" value="{{leave.pk}}" name="leave">
+                          <button type="submit" class="btn btn-primary btn-sm" >Approve</button>
+                        </form>
+                      </div>
+                      <div style="display:inline-block;">
+                        <form method="POST" style="margin:auto" action="/leave/">
+                          {% csrf_token %}
+                          <input type="hidden" value="reject" name="action">
+                          <input type="hidden" value="{{leave.pk}}" name="leave">
+                          <button class="btn2 btn-secondary btn-sm" type="submit" > Reject </button>
+                        </form>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  document.getElementById("leave11").classList.replace("side-nav", "active-side-nav");
+  document.getElementById("leave12").style.display = "block";
+</script>
+
+{% endblock %}

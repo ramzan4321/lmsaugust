@@ -1,0 +1,71 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Profile {% endblock title %}
+
+{% block content %}
+
+<head>
+  {% include "includes/admin-emp-profile-header.html" %}
+  <link rel="stylesheet" type="text/css" href="/static/css/button.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/leave.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/massege.css">
+</head>
+<body>
+  <div class="container-fluid ">
+    <div class="row py-2">
+        <div id="leave" class="col-md-12">
+          <div class="card ">
+              <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h1 class="text-center text-dark">{{emp.name}}'s  Leave</h1>
+                </div>
+                <div class="card-body p-0 table-responsive" style=" overflow:hidden;overflow-y: scroll;height: 300px; // change this to desired height">
+                  <div class="card-body p-0">
+                    <table class="table table-hover align-items-center table-flush">
+                        <thead class="thead-light">
+                          <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Day</th>
+                            <th scope="col">Leave Reason</th>
+                            <th scope="col">Leave Type</th>
+                            <th scope="col">Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for leave in all_leave %}
+                        <tr>
+                            <td >
+                              {{leave.leave_start_date}}
+                            </td>
+                            <td>
+                              {{leave.leave_days}}
+                            </td>
+                            <td id="leavereson">
+                              {{leave.leave_reason}}
+                            </td>
+                            <td>
+                              {{leave.leave_type}}
+                            </td>
+                            <td>
+                              {{leave.status}}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                  </div>
+                </div>
+            </div>
+          </div>
+          </div>
+    </div>
+  </div>
+  <script>
+    document.getElementById("profile11").classList.replace("side-nav", "active-side-nav");
+    document.getElementById("profile12").style.display = "block";
+    document.getElementById("leave22").classList.replace("header-nav", "active-nav");
+  </script>
+</body>
+
+
+{% endblock %}

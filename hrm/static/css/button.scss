@@ -1,0 +1,22 @@
+$primary-color: #007bff;
+
+.header {
+  background-color: $primary-color;
+  color: white;
+}
+
+.content {
+  font-size: 16px;
+}
+
+$primary-button-color: #007bff;
+
+// Style the button using the primary button color variable
+button {
+  background-color: $primary-button-color;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

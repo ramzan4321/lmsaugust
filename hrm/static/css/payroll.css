@@ -1,0 +1,22 @@
+
+#bankdetail {
+    background-color: #fff;
+}
+
+#yearselect{
+    width: 23%;
+}
+
+
+#payslippdf{
+    height: 500px;
+    display: none;
+}
+
+#not_found{
+    display: block;
+}
+
+.payslip-pdf{
+    width:100%;
+}

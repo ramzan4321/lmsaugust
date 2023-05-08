@@ -1,0 +1,124 @@
+{% extends 'layouts/base.html' %} {% load crispy_forms_tags %} {% block content %}
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="/static/css/button.css">
+{% endblock stylesheets %}
+  <div class="container-fluid mt--5" style=" border-radius: 10px; height:600px">
+    <div class="row mt-5">
+      <div class="col">
+        <div class="card  shadow mt-4">
+          <div id="employeedetail" class="table-responsive ml-2 mr-2 mt-4" style=" overflow:hidden; overflow-y: scroll;height: 585px;">
+            <div class="card-header  border-0">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="text-dark mb-0">Employee's List</h3>
+                </div>
+                <div class="col-4 text-right">
+                  <button type="button" onclick="empForm()" class="btn btn-primary">Create Employee</button>
+                </div>
+              </div>
+            </div>
+            <table class="table table-hover table align-items-center  table-flush">
+              <thead class=thead-light>
+                <tr>
+                  <th scope="col">Image</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">Employee</th>
+                  <th scope="col">Department</th>
+                </tr>
+              </thead>
+              <tbody id="employee">
+                {% for result in employee %}
+                <tr>
+                  <th scope="row">
+                    <div class="media align-items-center">
+                      <a class="avatar rounded-circle mr-3">
+                        <img alt="Image placeholder" src="{{ result.profile_image.url }}" onerror="this.src='/media/defaultprofile.jpeg'" >
+                      </a>
+                      <div class="media-body">
+                        <th scope="row">{{ result.user.username }}</th>
+                        <td><a class="text-info nav-link" href="/profile/{{result.id}}">{{ result.name }}</a></td>
+                        <td>{{ result.department }}</td>
+                      </div>
+                    </div>
+                  </th>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+        <div id="empform" style="display: none;" class="card">
+          <div class="card-header  border-0">
+            <div class="row align-items-center">
+              <div class="col-8">
+                <h3 class="text-white mb-0">Create Employee Form</h3>
+              </div>
+              <div class="col-4 text-right">
+                <button type="button" onclick="showemp()" class="btn btn-primary">Show Employee's List</button>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <form method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="id_user">User:</label>
+                <br>
+                <select class="form-control" id="id_user" name="user">
+                  {% for user in users %}
+                    <option value= {{user.pk}} >{{ user.username }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="id_designation">Designation:</label>
+                <br>
+                <input type="text" required class="form-control" id="id_designation" name="designation" maxlength="50">
+              </div>
+              <div class="form-group">
+                <label for="id_department">Department:</label>
+                <br>
+                <input type="text" required class="form-control" id="id_department" name="department" maxlength="50">
+              </div>
+              <div class="form-group">
+                <label for="id_salary">Salary:</label>
+                <br>
+                <input type="number" required class="form-control" id="id_salary" name="salary">
+              </div>
+              <div class="form-group">
+                <label for="id_role">Role:</label>
+                <br>
+                <select required class="form-control" id="id_role" name="role">
+                    <option ></option>
+                    <option value="ADMIN">ADMIN</option>
+                    <option value="EMPLOYEE">EMPLOYEE</option>
+                    <option value="GENERAL_USER">GENERAL USER</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary">Add Employee</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<script>
+  function empForm() {
+    document.getElementById("empform").style.display = "block";
+    document.getElementById("employeedetail").style.display = "none";
+
+  }
+
+  function showemp() {
+    document.getElementById("empform").style.display = "none";
+    document.getElementById("employeedetail").style.display = "block";
+  }
+  document.getElementById("profile11").classList.replace("side-nav", "active-side-nav");
+  document.getElementById("profile12").style.display = "block";
+  document.getElementById("profile22").classList.replace("header-nav", "active-nav");
+</script>
+
+{% endblock %}

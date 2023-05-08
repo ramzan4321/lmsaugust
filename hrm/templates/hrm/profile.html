@@ -1,0 +1,80 @@
+{% extends 'layouts/emp_base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/css/button.css">
+<body>
+  <div class="container-fluid mt-3 py-2">
+    <div class="row">
+      <div class="col-xl-8">
+        <div class="card">
+          <div class="card-header border-0">
+            <div class="row align-items-center">
+              <div class="col">
+                <h3 class="mb-0">Event</h3>
+              </div>
+            </div>
+            <div class="table-responsive" style=" overflow:hidden;overflow-y: scroll;height: 330px;">
+              <table class="table align-items-center " >
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">
+                      <div class="media align-items-center">
+                        <div class="media-body">
+                          <span class="mb-0 text-sm">Sorry, there are no upcoming events to display at this time. Please check back later.</span>
+                        </div>
+                      </div>
+                    </th>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4">
+        <div class="card shadow " style = "width:400px;height:400px">
+          <div class="card-header border-0">
+            <div class="row align-items-center">
+              <div class="col">
+                <h3 class="mb-0">UPCOMING  HOLIDAYS</h3>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive" style=" overflow:hidden;overflow-y: scroll;height: 300px;">
+            <table class="table table-hover align-items-center " >
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">DATE MONTH</th>
+                  <th scope="col">HOLIDAY NAME</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for holidaylist in holidaylist %}
+                <tr>
+                  <th scope="row">{{ holidaylist.holiday_date }}</th>
+
+                  <td id="holiday">{{ holidaylist.holiday_name }}</td>
+
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <script type="text/javascript">
+      document.getElementById("dash11").classList.replace("side-nav", "active-side-nav");
+      document.getElementById("dash12").style.display = "block";
+    </script>
+</body>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'layouts/emp_base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+{% if emp %}
+{% include "includes/emp-profile-header.html" %}
+{% endif %}
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/button.css">
+  </head>
+<body>
+    <div id="employeedetail" class="container-fluid">
+        <div class="row py-2">
+            <div  class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="border rounded px-2">
+                            <h2 class="p-2">About</h2>
+                            <div class="px-2">
+                              <span class="text-muted">{{ emp.about }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById("profile11").classList.replace("side-nav", "active-side-nav");
+        document.getElementById("profile12").style.display = "block";
+        document.getElementById("about22").classList.replace("header-nav", "active-nav");
+    </script>
+</body>
+
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Profile {% endblock title %}
+
+{% block content %}
+
+{% if emp %}
+{% include "includes/admin-emp-profile-header.html" %}
+{% endif %}
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/button.css">
+  </head>
+<body>
+    <div id="employeedetail" class="container-fluid">
+        <div class="row py-2">
+            <div  class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h1 class="text-center">Employee Details </h1>
+                            <button type="button"class="btn btn-primary" onclick="editForm()" >Edit Employee Detail</button>
+                        </div>
+                        <div class="form-group row">
+                            <label for="bank_name" class="col-sm-2 col-form-label">Designation:</label>
+                            <div class="col-sm-10">
+                            <input type="text" required class="form-control" value="{{ emp.designation }}" disabled id="name" name="name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="account_holder_name" class="col-sm-2 col-form-label">Role:</label>
+                            <div class="col-sm-10">
+                            <input type="text" required class="form-control" value="{{ emp.role }}" disabled id="mobile" name="mobile">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="branch_name" class="col-sm-2 col-form-label">Department:</label>
+                            <div class="col-sm-10">
+                            <input type="text" required class="form-control" value="{{ emp.department }}" disabled id="gender" name="gender">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="bank_account_no" class="col-sm-2 col-form-label">Salary:</label>
+                            <div class="col-sm-10">
+                            <input type="text" required class="form-control" value="{{ emp.salary }}" disabled id="dob" name="dob">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="employeeform"  class="container-fluid employeeform">
+        <div class="row py-2">
+            <div  class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h1 class="text-center">Employee Details </h1>
+                            <button type="button"class="btn btn-primary" onclick="showDetail()" >Show Employee Detail</button>
+                        </div>
+                        <form method="post"  enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <label for="bank_name" class="col-sm-2 col-form-label">Designation:</label>
+                            <div class="col-sm-10">
+                            <input type="text" required  class="form-control" value="{{ emp.designation }}"  id="designation" name="designation">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="branch_name" class="col-sm-2 col-form-label">Role:</label>
+                            <div class="col-sm-10">
+                            <select required class="form-control" id="role" name="role">
+                                <option ></option>
+                                {% if emp.role == 'ADMIN' %}
+                                <option value="ADMIN" selected>ADMIN</option>
+                                {% else %}
+                                <option value="ADMIN">ADMIN</option>
+                                {% endif %}
+                                {% if emp.role == 'EMPLOYEE' %}
+                                <option value="EMPLOYEE" selected>EMPLOYEE</option>
+                                {% else %}
+                                <option value="EMPLOYEE">EMPLOYEE</option>
+                                {% endif %}
+                                {% if emp.role == 'GENERAL_USER' %}
+                                <option value="GENERAL_USER" selected>GENERAL USER</option>
+                                {% else %}
+                                <option value="GENERAL_USER">GENERAL USER</option>
+                                {% endif %}
+                            </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="bank_account_no" class="col-sm-2 col-form-label">Department:</label>
+                            <div class="col-sm-10">
+                            <input type="text" required class="form-control" value="{{ emp.department }}"  id="department" name="department">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="account_holder_name" class="col-sm-2 col-form-label">Salary:</label>
+                            <div class="col-sm-10">
+                            <input type="text" required class="form-control" value="{{ emp.salary }}"  id="salary" name="salary">
+                            </div>
+                        </div>
+                            <div class="d-flex justify-content-center mt-5">
+                                <button type="submit"class="btn btn-primary" style="width: 20%">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+ function editForm() {
+    document.getElementById("employeedetail").style.display = "none";
+    document.getElementById("employeeform").style.display = "block";
+  }
+
+  function showDetail() {
+    document.getElementById("employeedetail").style.display = "block";
+    document.getElementById("employeeform").style.display = "none";
+  }
+  document.getElementById("profile11").classList.replace("side-nav", "active-side-nav");
+  document.getElementById("profile12").style.display = "block";
+  document.getElementById("profile22").classList.replace("header-nav", "active-nav");
+</script>
+
+{% endblock %}

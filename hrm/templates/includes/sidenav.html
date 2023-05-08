@@ -1,0 +1,105 @@
+<nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main " style="width: 200px;">
+  <div class="scrollbar-inner pl-0">
+    <!-- Brand -->
+    <div class="sidenav-header bg-white">
+      <a class="navbar-brand pl-0" href="/accounts/profile/">
+        <img src="/media/triodeclogo.png" class="navbar-brand-img" alt="Triodec.">
+      </a>
+    </div>
+    <div class="navbar-inner pl-3">
+      <!-- Collapse -->
+      <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+        <!-- Nav items -->
+        <ul class="navbar-nav">
+          <li class="nav-item ">
+            <a class="nav-link {% if 'index' in segment %} active {% endif %}" href="/accounts/profile/">
+              <i class="ni ni-tv-2 text-primary"></i>
+              <span class="nav-link-text side-nav" id="dash11">Dashboard</span>
+              <span class="arrow-right" id="dash12" style="margin-left: 30px; display: none;"></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if 'index' in segment %} active {% endif %}" href="/employees/">
+              <i class="ni ni-single-02 text-yellow"></i>
+              <span class="nav-link-text side-nav" id="profile11">Employees</span>
+              <span class="arrow-right" id="profile12" style="margin-left: 35px; display: none;"></span>
+            </a>
+          </li>
+        </ul>
+        <!-- Divider -->
+        <hr class="my-3">
+        <!-- Heading -->
+        <h6 class="navbar-heading active p-0">
+          <span class="">Management</span>
+        </h6>
+        <!-- Navigation -->
+        <ul class="navbar-nav mb-md-3">
+          <!-- <li class="nav-item">
+            <a class="nav-link {% if 'icons' in segment %} active {% endif %}" href="/project">
+              <i class="ni ni-planet text-orange"></i>
+              <span class="nav-link-text">Project and Task</span>
+            </a>
+          </li> -->
+
+          <li class="nav-item">
+            <a class="nav-link {% if 'icons' in segment %} active {% endif %}" href="/leave/">
+              <i class="ni ni-badge text-orange"></i>
+              <span class="nav-link-text side-nav" id="leave11">Leave</span>
+              <span class="arrow-right" id="leave12" style="margin-left: 70px; display: none;"></span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link {% if 'icons' in segment %} active {% endif %}" href="/payroll_expenses/">
+              <i class="ni ni-money-coins text-green"></i>
+              <span class="nav-link-text side-nav" id="payroll11">Payroll</span>
+              <span class="arrow-right" id="payroll12" style="margin-left: 60px; display: none;"></span>
+            </a>
+          </li>
+        </ul>
+        <!-- Divider -->
+        <!-- <hr class="my-3">
+        <h6 class="navbar-heading active p-0">
+          <span class="">Profile <i class="ni ni-single-02 text-orange"></i></span>
+        </h6>
+        <ul class="navbar-nav mb-md-3">
+          <div class="dropdown ml-3" style="width: 100%;">
+            <a class="btn btn-info dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+              Employee Profile
+            </a>
+            <div class="dropdown-menu">
+              {% for emp in emps %}
+              <a class="dropdown-item" href="/profile/{{ emp.user.id }}">{{ emp.name }}</a>
+              {% endfor %}
+            </div>
+          </div>
+         <li class="nav-item">
+            <a class="nav-link {% if 'icons' in segment %} active {% endif %}" href="/profile/{{ emp.user.id }}">
+              <i class="ni ni-single-02 text-orange"></i>
+              <span class="nav-link-text">{{ emp.name }}</span>
+            </a>
+          </li>
+          -->
+        </ul>
+        <!-- Divider -->
+        <hr class="my-3">
+        <!-- Heading -->
+        <h6 class="navbar-heading active p-0">
+          <span class="">Others</span>
+        </h6>
+        <!-- Navigation -->
+        <ul class="navbar-nav mb-md-3">
+          {% if request.user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">
+              <i class="ni ni-button-power text-red"></i>
+              <span class="nav-link-text side-nav">Logout</span>
+            </a>
+          </li>
+          {% else %}
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
