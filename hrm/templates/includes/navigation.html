@@ -37,9 +37,9 @@
             <div class="media align-items-center">
               <span class="avatar avatar-sm rounded-circle">
               {% if request.user.is_superuser %}
-              <img src="../../static/assets/img/brand/default.jpeg">
+              <img src="/static/assets/img/brand/default.jpeg">
               {% else %}
-              <img  src="{{ emp.profile_image.url }}">
+              <img  src="{{ emp.profile_image.url }}" onerror="this.src='../../static/assets/img/brand/default.jpeg'">
               {% endif %}
               </span>
               <div class="media-body  ml-2  d-none d-lg-block">

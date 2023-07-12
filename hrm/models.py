@@ -3,10 +3,10 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Sum
 from django.urls import reverse
-import itertools 
+import itertools
 from core.utils.dates import Date
 
-from hrm.choice import GENDER_CHOICES,  USER_ROLE, LEAVE_TYPES, STATUS_CHOICE
+from hrm.choice import GENDER_CHOICES,  USER_ROLE, LEAVE_TYPES, STATUS_CHOICE, LEAVE_FOR
 from core.models.models import SystemField
 from django.contrib.auth.hashers import make_password
 from core.utils.mailer import Mailer
@@ -85,24 +85,24 @@ class EmployeeManager(Employee):
 
         y = self.cary_forward_leaves()
         return x + y
-    
+
     def cary_forward_leaves(self):
         start_semester, end_semester = self._date.get_semesters()
         carry = 0
         if self.user.date_joined.date() < date.today().replace(day=1, month=10, year=2022):
             carry = 6 - (self.leaves.filter(
-                leave_type="PAID", 
+                leave_type="PAID",
                 status = "APPROVED",
-                leave_start_date__gte = start_semester, 
+                leave_start_date__gte = start_semester,
                 leave_start_date__lte = end_semester).aggregate(
                     leaves = Sum('leave_days')
             )["leaves"] or 0)
         if carry:
-            if carry >= 3: 
+            if carry >= 3:
                 if start_semester.month == 1:
                     return carry
                 return 3
-            return carry 
+            return carry
         return 0
 
     class Meta:
@@ -110,7 +110,7 @@ class EmployeeManager(Employee):
 class EmployeeBankDetail(SystemField):
     """
     It's Employee bank details, We will save only one bank details for each employee
-    we will use this bank details for send salary for each month 
+    we will use this bank details for send salary for each month
     """
 
     employee_bankdetail = models.OneToOneField(
@@ -140,6 +140,9 @@ class PaySlip(SystemField):
     payslip_name = models.CharField(max_length=250, null=False, blank=False)
     path = models.FilePathField(max_length=250, path="media", null=False, blank=False)
     dispatch_date = models.DateField()
+    leave_taken = models.IntegerField(default=0)
+    full_day = models.IntegerField(default=0)
+    half_day = models.IntegerField(default=0)
     salary = models.IntegerField(default=0)
     earning = models.IntegerField(default=0)
 
@@ -153,17 +156,17 @@ class PaySlip(SystemField):
     def deduction(self):
         return self.salary - self.earning
 
-    def notify_admin(self):
-        import pdb;pdb.set_trace()
-        self.process_email(
-            "Leave Request",
-            self.leave_request_template(),
-            settings.SUPER_ADMIN_EMAILS 
-        )
+    # def notify_admin(self):
+    #     import pdb;pdb.set_trace()
+    #     self.process_email(
+    #         "Payslip",
+    #         "Payslip has been generated for",
+    #         settings.SUPER_ADMIN_EMAILS
+    #     )
 class LeaveManagement(models.Model):
     """
     we will track leave for all employee
-    once leave will be counted we can evaluate salary for user 
+    once leave will be counted we can evaluate salary for user
     """
     employee_id = models.ForeignKey(
         Employee, on_delete=models.CASCADE, related_name='leaves')
@@ -171,6 +174,7 @@ class LeaveManagement(models.Model):
     leave_days = models.IntegerField()
     leave_start_date = models.DateField()
     leave_type = models.CharField(max_length=10, choices=LEAVE_TYPES)
+    leave_requested_for = models.CharField(max_length=5, choices=LEAVE_FOR, default="F")
     status = models.CharField(
         max_length=10, null=True, blank=True, default='PENDING', choices=STATUS_CHOICE)
 
@@ -195,7 +199,7 @@ class LeaveManagement(models.Model):
         _nxt = [*itertools.dropwhile(lambda x : x.month == self.leave_start_date.month, days)]
         self.leave_days = self.leave_days - _nxt.__len__()
         instance = super().save(*args, **kwargs)
-        if _nxt: 
+        if _nxt:
             self.create_leave(_nxt)
         return instance
 
@@ -206,32 +210,37 @@ class LeaveManagement(models.Model):
         return render_to_string("leave_request_email.html", {"obj":self})
 
     def notify_admin(self):
+        username = self.get_username()
         self.process_email(
             "Leave Request",
-            self.leave_request_template(),
-            settings.SUPER_ADMIN_EMAILS 
+            f"Please accept or reject the leave requested by user {username}",
+            settings.SUPER_ADMIN_EMAILS
         )
 
     def process_email(self, subject, message, email_to):
         Mailer(
-            subject=subject, 
+            subject=subject,
             message=message,
             email_to= email_to,
         ).send()
 
     def notify_user(self, action):
+        if action == "APPROVED":
+            message = "Congratulation! your leave request has been approved."
+        else:
+            message = "Sorry! we could not approved your leave request."
         self.process_email(
             f"Leave Request  {action}",
-            self.leave_request_template(),
+            message,
             [self.employee_id.user.email],
         )
-     
-    def approve_leave(self): 
+
+    def approve_leave(self):
         self.status = "APPROVED"
         self.save()
         self.notify_user(self.status)
 
-    def reject_leave(self): 
+    def reject_leave(self):
         self.status = "REJECTED"
         self.save()
         self.notify_user(self.status)
@@ -242,5 +251,5 @@ class HolidayList(models.Model):
 
     def __str__(self):
         return str(self.holiday_name)
-    
-    
+
+

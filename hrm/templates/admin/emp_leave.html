@@ -15,11 +15,11 @@
     <div class="row py-2">
         <div id="leave" class="col-md-12">
           <div class="card ">
-              <div class="card-body">
+            <div class="card-body">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h1 class="text-center text-dark">{{emp.name}}'s  Leave</h1>
                 </div>
-                <div class="card-body p-0 table-responsive" style=" overflow:hidden;overflow-y: scroll;height: 300px; // change this to desired height">
+                <div class="card-body p-0 table-responsive" id="tbl-leave" style="height: 300px;">
                   <div class="card-body p-0">
                     <table class="table table-hover align-items-center table-flush">
                         <thead class="thead-light">
@@ -28,11 +28,12 @@
                             <th scope="col">Day</th>
                             <th scope="col">Leave Reason</th>
                             <th scope="col">Leave Type</th>
+                            <th scope="col">Leave Requested For</th>
                             <th scope="col">Status</th>
                           </tr>
                         </thead>
                         <tbody>
-                        {% for leave in all_leave %}
+                        {% for leave in page %}
                         <tr>
                             <td >
                               {{leave.leave_start_date}}
@@ -46,6 +47,19 @@
                             <td>
                               {{leave.leave_type}}
                             </td>
+                            {% if leave.leave_requested_for == "F" %}
+                            <td>
+                              FULL DAY
+                            </td>
+                            {% elif leave.leave_requested_for == "FH" %}
+                            <td>
+                              FIRST HALF DAY
+                            </td>
+                            {% else %}
+                            <td>
+                              SECOND HALF DAY
+                            </td>
+                            {% endif %}
                             <td>
                               {{leave.status}}
                             </td>
@@ -54,6 +68,24 @@
                         </tbody>
                     </table>
                   </div>
+                  <br>
+                </div>
+                <div class="pagination mr-4" style="float: right;">
+                  {% if page.has_previous %}
+                      <a href="?page={{ page.previous_page_number }}">&laquo;</a>
+                  {% endif %}
+
+                  {% for i in page.paginator.page_range %}
+                      {% if i == page.number %}
+                          <a href="?page={{ i }}" class="active">{{ i }}</a>
+                      {% else %}
+                          <a href="?page={{ i }}">{{ i }}</a>
+                      {% endif %}
+                  {% endfor %}
+
+                  {% if page.has_next %}
+                      <a href="?page={{ page.next_page_number }}">&raquo;</a>
+                  {% endif %}
                 </div>
             </div>
           </div>
@@ -64,6 +96,14 @@
     document.getElementById("profile11").classList.replace("side-nav", "active-side-nav");
     document.getElementById("profile12").style.display = "block";
     document.getElementById("leave22").classList.replace("header-nav", "active-nav");
+    $(document).ready(function() {
+    const myDiv = $('#tbl-leave');
+
+    if (myDiv.height() > 280) {
+      myDiv.addClass('overflow: hidden; overflow-y: scroll;');
+    } else {
+    }
+    });
   </script>
 </body>
 

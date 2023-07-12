@@ -10,6 +10,7 @@ from hrm.models import PaySlip
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from core.utils.mailer import Mailer
+from django.conf import settings
 
 def generate_pdf(*args,**kwargs):
     employee = args[0]['employee']
@@ -144,7 +145,7 @@ def generate_pdf(*args,**kwargs):
         Mailer(
             subject=f"{'Your Payslip for month'}{base_data['salary_month_name']}",
             message="Here is your payslip",
-            email_to = [employee.user.email, "by242862@gmail.com"]
+            email_to = [employee.user.email, settings.SUPER_ADMIN_EMAILS]
         ).send(base_data['filepath'])
     return file 
 

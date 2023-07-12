@@ -6,7 +6,7 @@
     <div class="row mt-5">
       <div class="col">
         <div class="card  shadow mt-4">
-          <div id="employeedetail" class="table-responsive ml-2 mr-2 mt-4" style=" overflow:hidden; overflow-y: scroll;height: 585px;">
+          <div id="employeedetail" class="table-responsive ml-2 mr-2 mt-4" id="tbl-employee" style="height: 585px;">
             <div class="card-header  border-0">
               <div class="row align-items-center">
                 <div class="col-8">
@@ -119,6 +119,15 @@
   document.getElementById("profile11").classList.replace("side-nav", "active-side-nav");
   document.getElementById("profile12").style.display = "block";
   document.getElementById("profile22").classList.replace("header-nav", "active-nav");
+
+  $(document).ready(function() {
+    const myDiv = $('#tbl-employee');
+
+    if (myDiv.height() > 560) {
+      myDiv.addClass('overflow: hidden; overflow-y: scroll;');
+    } else {
+    }
+  });
 </script>
 
 {% endblock %}

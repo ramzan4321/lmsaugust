@@ -17,6 +17,12 @@ LEAVE_TYPES = Choices(
     ("UNPAID", "unpaid", _("Unpaid")),
 )
 
+LEAVE_FOR = Choices(
+    ("F", "Full day", _("Full day")),
+    ("FH", "First half", _("First half")),
+    ("SH", "Second half", _("Second half")),
+)
+
 STATUS_CHOICE = Choices(
     ("APPROVED", "approved", _("Approved")),
     ("REJECTED", "rejected", _("Rejected")),

@@ -40,14 +40,23 @@
             </div>
           </div>
           <div class="col-md-9 ">
-            <div class="card payslip-pdf" style="width:100%;">
+           <div class="card payslip-pdf" style="width:100%;">
               <div class="card-header "style=background:#0466c8>
                 <h4 class="text-white">{{ salary_month_name |date:"F Y" }} Payroll</h4>
               </div>
-              <div class="card-body bg-dark pdf" id="payslippdf" employee_id ="" style="height: 500px;">
+              <div class="card-body bg-dark pdf" id="payslippdf" employee_id ="" style="height: 500px;display: block;">
+                <embed src=" " width="100%" height="475" type="application/pdf">
+              </div>
+              <div id="not_found" style="height: 450px;display: none;">
+                <div style="height:400px;display: flex; justify-content: center;align-items: center;">
+                  <img src="/static/assets/img/icons/not-found.png" style="height:auto;width: 260px;">
+                </div>
+                <h2 style="text-align: center;" class="mb-4">Payslip Not Found</h2>
+              </div>
+              <!-- <div class="card-body bg-dark pdf" id="payslippdf" employee_id ="" style="height: 500px;">
                 <embed src=" " width="100%" height="400" type="application/pdf">
               </div>
-              <div id="error" style="display: none;">Payslip Not Found</div>
+              <div id="error" style="display: none;">Payslip Not Found</div> -->
             </div>
           </div>
         </div>
@@ -55,38 +64,41 @@
     </div>
   </div>
 </div>
-<div class="container-fluid   " style="background-color: white; border-radius: 10px">
+<div class="container-fluid" style="background-color: white; border-radius: 10px">
 <br>
 <br>
   <div class="card bg-light "  style="border-radius: 10px">
 
-    <div class="row pt-2">
+    <div class="row pt-2 flex-row flex-nowrap" style="overflow-x: scroll;">
       {% for x in months %}
-      <div class="col-md-3">
-        <div class="card-5 ml-3 mr-3 mb-4 mt-4">
+      <div class="col-md-2" id="month-card'{{ forloop.counter }}'">
+        <!-- <div class="card-5 ml-3 mr-3 mb-4 mt-4"> -->
+          <div class="card-5 mx-2">
           <a
             href='/payroll_expenses/{{x |date:"n"}}/{{x |date:"Y"}}/'
             style="text-decoration: none; color: black">
             <div class="card hover">
-              <div class="card-body pt-2 pb-2">
-                <div class="card-title  ml-6 mb-0">{{ x | date:"M Y" }}</div>
-                <div class="card-text ml-5  text-muted ">
+              <div class="card-body pt-3 pb-2">
+                <!-- <div class="card-title  ml-6 mb-0">{{ x | date:"M Y" }}</div> -->
+                <div class="card-title mb-0 text-center">{{ x | date:"M Y" }}</div>
+                <!-- <div class="card-text ml-5  text-muted "> -->
+                  <div class="card-text text-muted text-center">
                   1 {{ x | date:"M" }} -{{ x | date:"t M" }}
                 </div>
               </div>
-              <div class="card pt-2 pb-1" >
+              <div class="card pt-1 mt-2 mb-3" >
                 {% if cur.year == x.year %}
                   {% if cur.month > x.month %}
-                  <span  class="btn btn-primary btn-sm  "style=background:#0466c8>Completed</span>
+                  <span  class="btn btn-primary btn-sm  " style="background:#0466c8" id="'{{ forloop.counter }}'">Completed</span>
                   {% elif cur.month == x.month %}
-                  <span class="btn btn-success btn-sm ">Current</span>
+                  <span class="btn btn-success btn-sm active-month" id="'{{ forloop.counter }}'">Current</span>
                   {% elif cur.month < x.month %}
-                  <span class="btn btn-secondary btn-sm ">Upcoming</span>
+                  <span class="btn btn-secondary btn-sm " id="'{{ forloop.counter }}'">Upcoming</span>
                   {% endif %}
                 {% elif cur.year > x.year %}
-                <span class="btn btn-primary btn-sm "style=background:#0466c8>Completed</span>
+                <span class="btn btn-primary btn-sm " style="background:#0466c8" id="'{{ forloop.counter }}'">Completed</span>
                 {% elif cur.year < x.year %}
-                <span class="btn btn-secondary btn-sm ">Upcoming</span>
+                <span class="btn btn-secondary btn-sm " id="'{{ forloop.counter }}'">Upcoming</span>
                 {% endif %}
               </div>
             </div>
@@ -149,7 +161,8 @@
                 <th scope="col">S.no</th>
                 <th scope="col">Employee</th>
                 <th scope="col">Department</th>
-                <th scope="col">Leave Taken</th>
+                <th scope="col">Full Day Leave</th>
+                <th scope="col">Half Day Leave</th>
                 <th scope="col">Deduction</th>
                 <th scope="col">Salary</th>
                 <th scope="col">Earning</th>
@@ -162,7 +175,8 @@
                 <th scope="row">{{ forloop.counter }}</th>
                 <td><li style="cursor:pointer;" class="nav-link" onclick="getallpdf('{{ payslip.employee_payslip.id }}', '{{payslip.path}}', '{{payslip.dispatch_date.month|add:-1}}')">{{ payslip.employee_payslip.name }}</li></td>
                 <td>{{ payslip.employee_payslip.department }}</td>
-                <td>{{ total_leave_days }}</td>
+                <td>{{ payslip.full_day }}</td>
+                <td>{{ payslip.half_day }}</td>
                 <td>{{ payslip.deduction }}</td>
                 <td>{{ payslip.employee_payslip.salary }}</td>
                 <td>{{ payslip.earning }}</td>
@@ -180,6 +194,8 @@
     <hr class="mt-1" style="background-color: lightgray; width: 95%" />
   </div>
 </div>
+{% endblock %}
+{% block javascripts %}
 <script type="text/javascript">
   function getallpdf(employee_id, path, month){
     const _button = document.getElementById('deactive'+month);
@@ -220,9 +236,10 @@
       type: "get",
       data: { 'employee_id':empid },
       success: function (response) {
+        console.log("Payslip: "+response.payslip)
         if (response['payslip'] == 'Not found') {
           $("#payslippdf").css('display', 'none')
-          $("#error").css('display', 'block')
+          $("#not_found").css('display', 'block')
           $("#downloadpdf").attr('href', "")
         } else {
           $("#payslippdf").css('display', 'block')
@@ -238,5 +255,21 @@
   }
   document.getElementById("payroll11").classList.replace("side-nav", "active-side-nav");
   document.getElementById("payroll12").style.display = "block";
+  const _card = document.getElementsByClassName('active-month');
+  var card_ = _card[0].id;
+  var cardButton = document.getElementById('month-card'+card_)
+  cardButton.scrollIntoView({behavior: "smooth", block: "center", inline: "center" });
+
+  $('#payrolltabel').on('hidden.bs.modal', function() {
+    const button_ = document.getElementsByClassName('btn-active');
+    console.log("button: "+button_[0].id)
+    var btn_id = button_[0].id.slice(6, button_[0].id.length);
+    const button = document.getElementById('active'+btn_id);
+    button.classList.remove('btn-primary');
+    button.classList.remove('btn-active');
+    button.classList.add('btn-outline-primary');
+    button.setAttribute('id', 'deactive'+btn_id);
+    console.log("ID: "+'deactive'+btn_id)
+  });
 </script>
 {% endblock %}

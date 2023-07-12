@@ -14,7 +14,7 @@
               </div>
             </div>
           </div>
-          <div class="table-responsive ml-2 mr-2 mt-4" style=" overflow:hidden;overflow-y: scroll;height: 500px;">
+          <div class="table-responsive ml-2 mr-2 mt-4" id="tbl-leave" style="height: 500px;">
             <table class=" table-hover table align-items-center table-flush">
               <thead class=thead-light>
                 <tr>
@@ -24,6 +24,7 @@
                   <th scope="col">Total Leave Days</th>
                   <th scope="col">Leave Date</th>
                   <th scope="col">Leave Type</th>
+                  <th scope="col">Leave Requested For</th>
                   <th scope="col">Leave Status</th>
                   <th scope="col">Action</th>
                 </tr>
@@ -53,6 +54,19 @@
                   <td>
                     {{leave.leave_type}}
                   </td>
+                  {% if leave.leave_requested_for == "F" %}
+                  <td>
+                    FULL DAY
+                  </td>
+                  {% elif leave.leave_requested_for == "FH" %}
+                  <td>
+                    FIRST HALF DAY
+                  </td>
+                  {% else %}
+                  <td>
+                    SECOND HALF DAY
+                  </td>
+                  {% endif %}
                   <td>
                     {{leave.status}}
                   </td>
@@ -89,6 +103,15 @@
 <script>
   document.getElementById("leave11").classList.replace("side-nav", "active-side-nav");
   document.getElementById("leave12").style.display = "block";
+
+  $(document).ready(function() {
+    const myDiv = $('#tbl-leave');
+
+    if (myDiv.height() > 480) {
+      myDiv.addClass('overflow: hidden; overflow-y: scroll;');
+    } else {
+    }
+  });
 </script>
 
 {% endblock %}

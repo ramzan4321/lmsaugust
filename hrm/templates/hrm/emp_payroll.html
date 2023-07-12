@@ -98,12 +98,24 @@
         <div class="card-header"style=background:#0466c8 >
           <h4 id="payslimonth" class="text-white">{{ salary_month_name |date:"F Y" }} Payslip</h4>
         </div>
-        <div class="card-body bg-dark pdf" id="payslippdf" style="display: block;">
+        {% if payslip.path %}
+        <div class="card-body bg-dark pdf" id="payslippdf" style="height: 500px;display: block;">
           <embed src="/{{ payslip.path }}" width="100%" height="475" type="application/pdf">
         </div>
-        {% if not payslip.path %}
-        <div id="not_found">Payslip Not Found</div>
+        {% else %}
+        <div id="not_found" style="height: 450px;display: block;">
+          <div style="height:400px;display: flex; justify-content: center;align-items: center;">
+            <img src="../../static/assets/img/icons/not-found.png" style="height:auto;width: 260px;">
+          </div>
+          <h2 style="text-align: center;" class="mb-4">No Payslip Generated</h2>
+        </div>
         {% endif %}
+        <div id="not_found" style="height: 450px;display: none;">
+          <div style="height:400px;display: flex; justify-content: center;align-items: center;">
+            <img src="../../static/assets/img/icons/not-found.png" style="height:auto;width: 260px;">
+          </div>
+          <h2 style="text-align: center;" class="mb-4">Payslip Not Found</h2>
+        </div>
       </div>
     </div>
   </div>

@@ -14,7 +14,7 @@
                 <h3 class="mb-0">Event</h3>
               </div>
             </div>
-            <div class="table-responsive" style=" overflow:hidden;overflow-y: scroll;height: 330px;">
+            <div class="table-responsive" id="tbl-event" style="height: 330px;">
               <table class="table align-items-center " >
                 <thead class="thead-light">
                   <tr>
@@ -47,7 +47,7 @@
               </div>
             </div>
           </div>
-          <div class="table-responsive" style=" overflow:hidden;overflow-y: scroll;height: 300px;">
+          <div class="table-responsive" id="tbl-holiday" style="height: 300px;">
             <table class="table table-hover align-items-center " >
               <thead class="thead-light">
                 <tr>
@@ -74,6 +74,20 @@
     <script type="text/javascript">
       document.getElementById("dash11").classList.replace("side-nav", "active-side-nav");
       document.getElementById("dash12").style.display = "block";
+
+      $(document).ready(function() {
+        const myDiv = $('#tbl-event');
+        const myHDiv = $('#tbl-holiday')
+
+        if (myDiv.height() > 305) {
+          myDiv.addClass('overflow: hidden; overflow-y: scroll;');
+        } else {
+        }
+        if (myHDiv.height() > 280) {
+          myHDiv.addClass('overflow: hidden; overflow-y: scroll;');
+        } else {
+        }
+      });
     </script>
 </body>
 

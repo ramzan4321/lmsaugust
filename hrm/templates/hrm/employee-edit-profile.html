@@ -131,19 +131,19 @@
                         <div class="form-group row">
                             <label for="branch_name" class="col-sm-2 col-form-label">Gender:</label>
                             <div class="col-sm-10">
-                            <select required  class="form-control" id="gender" name="gender">
+                            <select  class="form-control" required id="gender" name="genderselect">
                                 {% if emp.gender == 'MALE' %}
                                 <option>----</option>
-                                <option selected>Male</option>
-                                <option>Female</option>
+                                <option value="MALE" selected>Male</option>
+                                <option value="FEMALE">Female</option>
                                 {% elif emp.gender == 'FEMALE' %}
                                 <option>----</option>
-                                <option>Male</option>
-                                <option selected>Female</option>
+                                <option value="MALE">Male</option>
+                                <option value="FEMALE" selected>Female</option>
                                 {% else %}
                                 <option>----</option>
-                                <option>Male</option>
-                                <option>Female</option>
+                                <option value="MALE">Male</option>
+                                <option value="FEMALE">Female</option>
                                 {% endif %}
                             </select>
                             </div>
