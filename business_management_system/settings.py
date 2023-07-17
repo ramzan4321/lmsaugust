@@ -154,7 +154,7 @@ LOGIN_URL = "/login/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_FROM = "super_admin@triodec.com"
-SUPER_ADMIN_EMAILS= ["rahul34@mailinator.com", "rahul342@mailinator.com"]
+SUPER_ADMIN_EMAILS= ["ramzanalitrux@gmail.com", "aliramzan982@gmail.com"]
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = 'smtp.gmail.com'
