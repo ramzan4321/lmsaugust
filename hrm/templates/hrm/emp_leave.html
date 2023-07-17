@@ -1,6 +1,7 @@
 {% extends 'layouts/emp_base.html' %}
 {% block content %}
 {% load crispy_forms_tags %}
+{% load tz %} 
 
 <head>
   <link rel="stylesheet" type="text/css" href="/static/css/button.css">
@@ -39,6 +40,7 @@
                       <th scope="col">Leave Type</th>
                       <th scope="col">Leave Requested For</th>
                       <th scope="col">Status</th>
+                      <th scope="col">Edit</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -72,6 +74,13 @@
                       <td>
                         {{leave.status}}
                       </td>
+                      <td>
+                        {% if leave.action  %}
+                            Action allowed only two days before.
+                        {% else %}
+                            <!-- Your logic if your_date is later than two_days_ago -->
+                            <button class="btn btn-primary" onclick="updateLeave('{{leave.id}}')">Edit</button>  <a href="/delete_leave/{{leave.id}}" class="btn btn-danger">Delete</a></td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                   </tbody>
@@ -173,6 +182,80 @@
         </div>
       </div>
 
+      <div id="updateleaveform" class="col-md-5 leaveform">
+        <div class="card">
+          <div class="card-body">
+            <form method="POST" action="/leave/">
+              <input type="hidden" id="update_leave_id" name="leave_id" value="">
+              <div class="container">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h1 class="text-center"> Update Leave Form</h1>
+                  <button type="button" class="btn btn-primary" onclick="showForm()">Show Leave</button>
+                </div>
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="bank_name" class="form-label">Leave reason:</label>
+                  <!-- <div class="col-sm-10"> -->
+                    <textarea type="text" class="form-control" required id="update_leave_reason"
+                      name="leave_reason" value=""></textarea>
+                  <!-- </div> -->
+                </div>
+                <div class="form-group">
+                  <label for="bank_name" class="form-label">Leave Days:</label>
+                  <!-- <div class="col-sm-10"> -->
+                    <input type="number" class="form-control" id="update_leave_days" name="leave_days" required value="">
+                  <!-- </div> -->
+                </div>
+                <div class="form-group">
+                  <label for="bank_name" class="form-label">Leave Start Date:</label>
+                  <!-- <div class="col-sm-10"> -->
+                    <input type="date" class="form-control" min="{{date}}" onchange="showTeam('update')" id="update_leave_start_date"
+                      name="leave_start_date" required value="">
+                  <!-- </div> -->
+                </div>
+                <div style="display: none;" id="team1" >
+                <div class="d-flex justify-content-between align-items-center mt--3 pb-3">
+                  <!-- <div class="col-md-2"> -->
+                    <label for="bank_name" class="form-label"></label>
+                  <!-- </div> -->
+                    <!-- <div class="col-md-10"> -->
+
+                      <div class="avatar-group d-flex py-2" style="align-items:center;" id="update_team">
+
+                      </div>
+                    <!-- </div> -->
+                </div>
+              </div>
+                <div class="form-group">
+                  <label for="bank_name" class="form-label">Leave Requested For:</label>
+                  <!-- <div class="col-sm-10"> -->
+                    <select name="leave_requested_for" class="form-control" required="" id="update_id_leave_for">
+                      <option value="" selected="">---------</option>
+                      <option value="F">Full Day</option>
+                      <option value="FH">First Half</option>
+                      <option value="SH">Second Half</option>
+                    </select>
+                  <!-- </div> -->
+                </div>
+                <div class="form-group">
+                  <label for="bank_name" class="form-label">Leave type:</label>
+                  <!-- <div class="col-sm-10"> -->
+                    <select name="leave_type" class="form-control" required="" id="update_id_leave_type">
+                      <option value="" selected="">---------</option>
+                      <option value="PAID">PAID</option>
+                      <option value="UNPAID">UNPAID</option>
+                    </select>
+                  <!-- </div> -->
+                </div>
+                <div class="d-flex justify-content-center mt-5">
+                  <button type="submit" class="btn btn-primary" style="width: 20%">Update</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
        <div class="col-md-12 p-2" id="cal12">
         <div class="card">
           <div class="card-header d-flex justify-content-between align-items-center pb-3">
@@ -217,10 +300,47 @@
   </div>
 </body>
 <script>
-  function showTeam() {
-    var leave_days = document.getElementById("leave_days").value;
-    var start_date = document.getElementById("leave_start_date").value;
-    var team_2 = document.getElementById("team2")
+  function updateLeave(id) {
+    console.log("Leave ID: ", id)
+    
+    $.ajax({
+				url: "/get_leave_info/",
+				type: "get",
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: { 'id': id },
+				success: function (response) {
+          console.log('Line 306')
+          console.log("Response: ", response)
+					if (response['status'] === 'success') {
+            document.getElementById("update_leave_id").value = response['get_leave_info']['leave_id'];
+            document.getElementById("update_leave_reason").value = response['get_leave_info']['leave_reason'];
+            document.getElementById("update_leave_days").value = response['get_leave_info']['leave_days'];
+            document.getElementById("update_leave_start_date").value = response['get_leave_info']['leave_start_date'];
+            document.getElementById("update_id_leave_for").value = response['get_leave_info']['leave_requested_for'];
+            document.getElementById("update_id_leave_type").value = response['get_leave_info']['leave_type'];
+					}
+				}
+			});
+    document.getElementById("leave").style.display = "none";
+    document.getElementById("leaveform").style.display = "none";
+    document.getElementById("updateleaveform").style.display = "block";
+    document.getElementById("cal12").classList.replace("col-md-12", "col-md-7");
+  }
+  function showTeam(type) {
+    console.log("Type: ", type)
+    if (type == 'update') {
+      console.log("Line 326")
+      var leave_days = document.getElementById("update_leave_days").value;
+      var start_date = document.getElementById("update_leave_start_date").value;
+      var team_2 = document.getElementById("update_team")
+    } else {
+      var leave_days = document.getElementById("leave_days").value;
+      var start_date = document.getElementById("leave_start_date").value;
+      var team_2 = document.getElementById("team2")
+    }
+    
     if (leave_days) {
       leave_days = leave_days;
     } else {
@@ -301,6 +421,13 @@
       }
       })
   }
+  // function updateleave(id) {
+  //   document.getElementById("leave").style.display = "none";
+  //   document.getElementById("leaveform").style.display = "none";
+  //   document.getElementById("updateleaveform").style.display = "block";
+  //   document.getElementById("cal12").classList.replace("col-md-12", "col-md-7");
+  // }
+
   function leaveForm() {
     document.getElementById("leave").style.display = "none";
     document.getElementById("leaveform").style.display = "block";

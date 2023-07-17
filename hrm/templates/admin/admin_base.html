@@ -102,7 +102,7 @@
 </div>
 <div class="container-fluid mt--7"  >
   <div class="row">
-    <div class="col-xl-8 mb-5 mb-xl-0">
+    <div class="col-xl-7 mb-5 mb-xl-0">
       <div class="card bg-gradient-secondary shadow">
         <div class="card-header bg-white">
           <div class="row align-items-center">
@@ -138,8 +138,8 @@
         </div>
       </div>
     </div>
-    <div class="col-xl-4">
-      <div class="card shadow " style = "width:400px;height:400px">
+    <div class="col-xl-5">
+      <div class="card shadow " style = "width:100%;height:400px">
         <div class="card-header bg-transparent">
           <div id="holidaylist">
             <div class="row align-items-center">
@@ -157,6 +157,7 @@
                   <tr>
                     <th scope="col">DATE MONTH</th>
                     <th scope="col">HOLIDAY NAME</th>
+                    <th scope="col">EDIT</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -166,6 +167,7 @@
                     <td id="holiday" style="word-wrap: break-word; word-break: break-all;white-space: normal;">
                       {{ holidaylist.holiday_name }}
                     </td>
+                    <td><button class="btn btn-primary" onclick="updateHolidays('{{holidaylist.id}}')">Edit</button>  <a href="/delete_holiday/{{holidaylist.id}}" class="btn btn-danger">Delete</a></td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -201,6 +203,37 @@
             </div>
           </form>
         </div>
+
+        <div class="holidayform" id="updateholidayform">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="mb-0">Update  Holiday</h3>
+            &nbsp;&nbsp;
+            <!-- <button type="button" onclick="showholiday()" class="btn btn-primary">Show Holidays</button> -->
+          </div>
+          <form method="post" action="{% url 'holiday' %}" class="text-center">
+            {% csrf_token %}
+            <input type="hidden" name="holiday_id" value="" id="holiday_id">
+            <div class="form-group row">
+              <label for="holiday_name" class="col-sm-3 col-form-label">Holiday Name:</label>
+              <div class="col-sm-9">
+                <input type="text" required class="form-control" maxlength = "50" id="update_holiday_name" name="holiday_name" value="">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="holiday_date" class="col-sm-3 col-form-label">Holiday Date:</label>
+              <div class="col-sm-9">
+                <input type="date" required class="form-control" id="update_holiday_date" name="holiday_date" value="">
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-12">
+
+                <button type="submit"  class="btn btn-primary">Update</button>
+
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -210,6 +243,28 @@
 
 
 <script>
+  function updateHolidays(id) {
+    console.log("Holiday ID: ", id)
+    $.ajax({
+				url: "/get_holiday/",
+				type: "get",
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: { 'id': id },
+				success: function (response) {
+					if (response['status'] === 'success') {
+						console.log("Success!")
+            document.getElementById("holiday_id").value = response['holiday']['holiday_id'];
+            document.getElementById("update_holiday_name").value = response['holiday']['holiday_name'];
+            document.getElementById("update_holiday_date").value = response['holiday']['holiday_date'];
+					}
+				}
+			});
+    document.getElementById("holidaylist").style.display = "none";
+    document.getElementById("holidayform").style.display = "none";
+    document.getElementById("updateholidayform").style.display = "block";
+  }
    function addForm() {
     document.getElementById("holidaylist").style.display = "none";
     document.getElementById("holidayform").style.display = "block";

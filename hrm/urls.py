@@ -29,6 +29,10 @@ urlpatterns = [
     path('adminemppayroll/<int:pk>/<int:month>/<int:year>/', views.AdminEmpPayroll.as_view(), name='adminemppayroll'),
     path('payroll_expenses/<int:month>/<int:year>/',views.PayRollView.as_view(), name='payroll_expense'),
     path('holiday/',views.HolidayView.as_view(), name='holiday'),
+    path('get_holiday/', views.HolidayView.as_view(), name="get_holiday"),
+    path('delete_holiday/<int:pk>', views.HolidayView.as_view(), name="delete_holiday"),
+    path('get_leave_info/', views.LeaveRequestView.as_view(), name="get_leave_info"),
+    path('delete_leave/<int:leave_id>', views.LeaveRequestView.as_view(), name="delete_leave"),
 
 ]
 if settings.DEBUG:

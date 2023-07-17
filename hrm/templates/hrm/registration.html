@@ -72,7 +72,7 @@
 
           <div class="card-body px-lg-5 py-lg-5">
             <div class="text-center text-dark mb-4">
-              <h3><b> sign up </b></h3>
+              <h3><b> Sign up </b></h3>
             </div>
             <div class="main-content" id="panel">
 
@@ -86,7 +86,7 @@
             <form role="form" method="post">
               {% csrf_token %}
               <div class="form-group">
-                <ul>
+                <ul id="user-info">
                   <li><span class="text-muted" style="font-size: 12px;"><b>Username: </b> must be 8 characters long.</span></li>
                   <li><span class="text-muted" style="font-size: 12px;"><b>Password: </b> must be 8 characters long and contains both letters and numbers.</span></li>
                 </ul>
@@ -168,6 +168,13 @@
   <!--   Argon JS   -->
   <!--<script src="/static/assets/js/argon-dashboard.min.js?v=1.1.2"></script>-->
   <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  {% if messages %}
+  <script>
+    $("#user-info").hide(300);
+    // var elem = document.getElementById('user-info');
+    // elem.style.display = "none";
+  </script>
+  {% endif %}
   <script>
     var year = new Date().getFullYear();
     $("#copyright").append(`© ${year} <a href="http://www.triodec.com" style=color:#fff target="_blank">Triodec Solutions</a>`);
@@ -181,7 +188,8 @@
   <script type="text/javascript">
     setTimeout(function () {
       $("#my-div").fadeOut('slow');
-    }, 5000);
+      $("#user-info").show(300);
+    }, 15000);
   </script>
 </body>
 </html>

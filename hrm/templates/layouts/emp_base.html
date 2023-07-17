@@ -57,17 +57,7 @@
     }, 3000);
   </script>
   <script type="text/javascript">
-    var browserZoomLevel = Math.round(window.devicePixelRatio * 100);
-    // if zoom level is greater than 80
-    if (browserZoomLevel>80){
-        // find how much
-        zoom_level = 100-(browserZoomLevel-80)
-        // add percentage symbol with value
-        zoom_percent = zoom_level+"%"
-        // adjust the browser zoom level
-        document.body.style.zoom = zoom_percent
-      }
-
+    document.body.style.zoom = "80%";
   </script>
 </body>
 

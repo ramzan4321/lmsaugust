@@ -97,6 +97,47 @@
           </div>
         </div>
       </div>
+
+      <div class="col-md-12 p-2" id="cal12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center pb-3">
+            <h1>Shared Leave Calendar</h1>
+            <span><b class="bg-success text-white rounded-circle">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b> On leave</span>
+          </div>
+          <div class="card-body p-2" id="leave_card">
+            <input type="hidden" id="start_week" value="{{ current_week_start }}">
+            <table class="table table-hover align-items-center table-flush">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col" style="font-size: 12px; color:black"><button onclick="week('prev')" class="btn-sm btn-primary"><i class="ni ni-bold-left text-white"></i></button> &nbsp; {{ prev_date }} - {{ next_date }} &nbsp; <button onclick="week('next')" class="btn-sm btn-primary"><i class="ni ni-bold-right text-white"></i></button></th>
+                  <th scope="col" style="font-size: 12px; color:black">Mo</th>
+                  <th scope="col" style="font-size: 12px; color:black">Tu</th>
+                  <th scope="col" style="font-size: 12px; color:black">We</th>
+                  <th scope="col" style="font-size: 12px; color:black">Th</th>
+                  <th scope="col" style="font-size: 12px; color:black">Fr</th>
+                  <th scope="col" style="font-size: 12px; color:black">Sa</th>
+                  <th scope="col" style="font-size: 12px; color:black">Su</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for emp in emp_leave_list %}
+              <tr>
+                <td><img alt="Image placeholder" src="/{{ emp.image }}" class="avatar-sm rounded-circle">&nbsp;&nbsp; {{ emp.name }}</td>
+                {% for day in current_week_days %}
+                {% if day.day in emp.leave_list %}
+                <td><b class="bg-success text-white p-3 rounded-circle">{{ day.day }}</b></td>
+                {% else %}
+                <td>{{ day.day }}</td>
+                {% endif %}
+                {% endfor %}
+              </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -112,6 +153,52 @@
     } else {
     }
   });
+
+  function week(type) {
+    var current_week_start = document.getElementById("start_week").value
+    console.log(current_week_start)
+    console.log(type)
+    $.ajax({
+      url: "/week" + '/' + current_week_start + '/' + '?q='+type,
+      type: "get",
+      success: function (response) {
+        console.log(response['current_week_days'])
+        console.log(response['current_week_start'])
+        var mystr = `<input type="hidden" id="start_week" value="${response['current_week_start']}">
+            <table class="table table-hover align-items-center table-flush">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col" style="font-size: 12px; color:black"><button onclick="week('prev')" class="btn-sm btn-primary"><i class="ni ni-bold-left text-white"></i></button> &nbsp; ${response['prev_date']} - ${response['next_date']} &nbsp; <button onclick="week('next')" class="btn-sm btn-primary"><i class="ni ni-bold-right text-white"></i></button></th>
+                  <th scope="col" style="font-size: 12px; color:black">Mo</th>
+                  <th scope="col" style="font-size: 12px; color:black">Tu</th>
+                  <th scope="col" style="font-size: 12px; color:black">We</th>
+                  <th scope="col" style="font-size: 12px; color:black">Th</th>
+                  <th scope="col" style="font-size: 12px; color:black">Fr</th>
+                  <th scope="col" style="font-size: 12px; color:black">Sa</th>
+                  <th scope="col" style="font-size: 12px; color:black">Su</th>
+                </tr>
+              </thead>
+              <tbody>`
+        for (var i = 0; i < response['emp_leave_list'].length; i++) {
+          mystr+= `<tr>
+                <td><img alt="Image placeholder" src="/${response['emp_leave_list'][i]['image']}" class="avatar-sm rounded-circle">&nbsp;&nbsp; ${response['emp_leave_list'][i]['name']}</td>`
+                for (var j = 0; j < response['current_week_days'].length; j++) {
+                  if (response['emp_leave_list'][i]['leave_list'].includes(response['current_week_days'][j])) {
+                    mystr += `<td><b class="bg-success text-white p-3 rounded-circle">${response['current_week_days'][j] }</b></td>`
+                  } else {
+                    mystr += `<td>${response['current_week_days'][j] }</td>`
+                  }
+                }
+          mystr += `</tr>`
+
+        }
+        mystr += `</tbody>
+            </table>`
+      $('#leave_card').empty()
+      $('#leave_card').append(mystr)
+      }
+      })
+  }
 </script>
 
 {% endblock %}

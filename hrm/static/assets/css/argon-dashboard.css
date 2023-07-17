@@ -5524,6 +5524,19 @@ input[type="button"].btn-block {
   border-color: #f5c6cb;
 }
 
+.btn-outline-danger {
+  color: #dc3545;
+  background-color: transparent;
+  background-image: none;
+  border-color: #dc3545;
+}
+
+.alert-error {
+  color: #842029;
+  background-color: #f8d7da;
+  border-color: #f5c2c7;
+}
+
 .alert-danger hr {
   border-top-color: #f63e62;
 }
