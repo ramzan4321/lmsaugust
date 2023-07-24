@@ -141,11 +141,13 @@ def generate_pdf(*args,**kwargs):
     fs = FileSystemStorage('')
     file = FileResponse(fs.open(base_data['filepath'], 'rb'))
     if kwargs.get("send_email"):
-        # import pdb; pdb.set_trace()
+        emailTo = [employee.user.email]
+        for admin_email in settings.SUPER_ADMIN_EMAILS:
+            emailTo.append(admin_email)
         Mailer(
             subject=f"{'Your Payslip for month'}{base_data['salary_month_name']}",
             message="Here is your payslip",
-            email_to = [employee.user.email, settings.SUPER_ADMIN_EMAILS]
+            email_to = emailTo
         ).send(base_data['filepath'])
     return file 
 

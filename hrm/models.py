@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Sum
@@ -156,13 +156,20 @@ class PaySlip(SystemField):
     def deduction(self):
         return self.salary - self.earning
 
-    # def notify_admin(self):
-    #     import pdb;pdb.set_trace()
-    #     self.process_email(
-    #         "Payslip",
-    #         "Payslip has been generated for",
-    #         settings.SUPER_ADMIN_EMAILS
-    #     )
+    def process_email(self, subject, message, email_to):
+        Mailer(
+            subject=subject,
+            message=message,
+            email_to= email_to,
+        ).send()
+
+    def notify_admin(self):
+        first_date_of_month = datetime(self.dispatch_date.year, self.dispatch_date.month, 1)
+        self.process_email(
+            f"{(first_date_of_month - timedelta(days=2)).strftime('%B')} Salary Slip",
+            f"Payslip has been generated for {self.employee_payslip.name}",
+            settings.SUPER_ADMIN_EMAILS
+        )
 class LeaveManagement(models.Model):
     """
     we will track leave for all employee

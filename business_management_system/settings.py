@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     # manual install app
     "core",
     "hrm",
-
+    "celery",
+    "django_celery_beat",
     # third party installed apps
     "rest_framework",
     "crispy_forms",
@@ -79,7 +80,6 @@ TEMPLATES = [
         },
     },
 ]
-
 WSGI_APPLICATION = "business_management_system.wsgi.application"
 
 
@@ -89,23 +89,24 @@ WSGI_APPLICATION = "business_management_system.wsgi.application"
 env = environ.Env()
 environ.Env.read_env()
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": env("DATABASE_NAME"),
-#         "USER": env("DATABASE_USER"),
-#         "PASSWORD": env("DATABASE_PASSWORD"),
-#         "HOST": env("DATABASE_HOST"),
-#         "PORT": env("DATABASE_PORT"),
-#     }
-# }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'triodec')
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "lms_db",
+        "USER": "postgres",
+        "PASSWORD": "Sxua3zwKaxdEtGc6zUbC",
+        "HOST": "lmsdb.c7jx7lbeqaog.ap-south-1.rds.amazonaws.com",
+        "PORT": "5432",
     }
 }
+
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR, 'triodec')
+#    }
+#}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -145,7 +146,7 @@ STATIC_URL = "static/"
 STATIC_ROOT = "/media/"
 
 
-STATIC_ROOT = "/home/triodecsolutions/business-management-system/business_management_system/hrm/static"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 LOGIN_REDIRECT_URL = 'accounts/profile/'
 LOGIN_URL = "/login/"
 # Default primary key field type
@@ -154,7 +155,7 @@ LOGIN_URL = "/login/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_FROM = "super_admin@triodec.com"
-SUPER_ADMIN_EMAILS= ["ramzanalitrux@gmail.com", "aliramzan982@gmail.com"]
+SUPER_ADMIN_EMAILS= ["mayur@triodecsolutions.com", "shivani@triodecsolutions.com"]
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = 'smtp.gmail.com'
@@ -163,7 +164,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'triodecsolutions@gmail.com'
 EMAIL_HOST_PASSWORD = 'nkvkpibppfsksmmn'
 
-CELERY_BROKER_URL = "redis://localhost:6379"
-CELERY_RESULT_BACKEND = "redis://localhost:6379"
+CELERY_BROKER_URL = "redis://lmsredis.ejrgvv.ng.0001.aps1.cache.amazonaws.com:6379"
+CELERY_RESULT_BACKEND = "redis://lmsredis.ejrgvv.ng.0001.aps1.cache.amazonaws.com:6379"
 
 timezone = 'Asia/Kolkata'

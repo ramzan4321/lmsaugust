@@ -26,7 +26,10 @@ def all_leaves(employee):
     return tmp_list
 
 def employee_leave_check(employee, start_date, requested_leave_days):
-    oldleave = LeaveManagement.objects.filter(employee_id=employee, leave_start_date__month__range=[(start_date.month-1),(start_date.month+1)]).exclude(status="REJECTED")
+    if leave_id:
+        oldleave = LeaveManagement.objects.filter(employee_id=employee, leave_start_date__month__range=[(start_date.month-1),(start_date.month+1)]).exclude(status="REJECTED", id=leave_id)
+    else:
+        oldleave = LeaveManagement.objects.filter(employee_id=employee, leave_start_date__month__range=[(start_date.month-1),(start_date.month+1)]).exclude(status="REJECTED")
     for x in oldleave:
         days_in_leave = Date(x.leave_start_date).get_next_working_days(x.leave_days)
         for y in requested_leave_days:

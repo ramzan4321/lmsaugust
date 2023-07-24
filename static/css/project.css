@@ -1,0 +1,136 @@
+.obdt {
+    background-color: #003b61;
+    color: white;
+}
+
+.obd {
+    background-color: #046997;
+    color: white;
+}
+
+.obl {
+    background-color: #318db2;
+    color: white;
+}
+
+.form_card {
+    height: 300px;
+    overflow-y: scroll;
+}
+
+.card-h {
+    height: 350px;
+    overflow-y: scroll;
+}
+
+.icon-container {
+    border: 0px solid rgb(255, 255, 255);
+    padding: 30px;
+    padding-top: 40px;
+    border-radius: 10px;
+    background-color: aliceblue;
+    box-shadow: 10px 10px 10px gray;
+    height: 150px;
+}
+
+.icon-container a {
+    text-decoration: none;
+    color: black;
+}
+
+.icon-label {
+    margin-left: 60px;
+
+}
+
+.icon {
+    float: left;
+    border-right: 3px solid gray;
+    padding-right: 20px;
+}
+
+.month-container {
+    text-align: center;
+    border: 1px solid lightgray;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px lightgray;
+}
+
+.month-status p {
+    padding: 0px;
+    color: whitesmoke;
+}
+
+.month-status {
+    margin-top: 10px;
+    width: 100%;
+    background-color: rgb(248, 248, 248);
+}
+
+.payroll_subtitle {
+    padding: 15px;
+    border-left: 3px solid lightgrey;
+    height: 80px;
+}
+
+.nav-link {
+    color: black;
+}
+
+.image {
+    width: 500px;
+    height: 200px;
+}
+
+.header-nav {
+    color: black;
+}
+
+.header-nav {
+    display: block;
+}
+
+.active-nav,
+.header-nav:hover {
+    color: #0466C8;
+    font-weight: 900;
+    display: block;
+}
+
+.active-side-nav,
+.side-nav:hover {
+    color: #0466C8;
+    font-weight: 900;
+}
+
+.arrow-right {
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 7px solid #0466C8;
+    margin-bottom: 4px;
+}
+
+.pagination {
+    display: inline-block;
+  }
+  
+  .pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+  }
+  
+  .pagination a.active {
+    background-color: #0466C8;
+    color: white;
+    border-radius: 5px;
+  }
+  
+  .pagination a:hover:not(.active) {
+    background-color: #ddd;
+    border-radius: 5px;
+  }
