@@ -1,0 +1,213 @@
+{% extends 'layouts/emp_base.html' %}
+
+{% block title %} Profile {% endblock title %}
+
+{% block content %}
+
+{% if emp %}
+	{% include "includes/emp-profile-header.html" %}
+{% endif %}
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/button.css">
+  </head>
+<body>
+    {% if emp %}
+    <div id="employeedetail" class="container-fluid">
+        <div class="row py-2">
+            <div  class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h1 class="text-center">Employee Details </h1>
+                            <button type="button"  class="btn btn-primary" onclick="editForm()" >Edit Employee Detail</button>
+                        </div>
+                        <div class="form-group row">
+                            <label for="bank_name" class="col-sm-2 col-form-label">Name:</label>
+                            <div class="col-sm-10">
+                            <input type="text" class="form-control" value="{{ emp.name }}" disabled id="name" name="name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="branch_name" class="col-sm-2 col-form-label">Gender:</label>
+                            <div class="col-sm-10">
+                            <select required  class="form-control" id="gender" name="gender">
+                                {% if emp.gender == 'MALE' %}
+                                <option>----</option>
+                                <option selected>Male</option>
+                                <option>Female</option>
+                                {% elif emp.gender == 'FEMALE' %}
+                                <option>----</option>
+                                <option>Male</option>
+                                <option selected>Female</option>
+                                {% else %}
+                                <option>----</option>
+                                <option>Male</option>
+                                <option>Female</option>
+                                {% endif %}
+                            </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="bank_account_no" class="col-sm-2 col-form-label">Date of Birth:</label>
+                            <div class="col-sm-10">
+                            <input type="date" required class="form-control" value="{% if emp.dob %}{{ emp.dob|date:'Y-m-d' }}{% endif %}"   id="dob" name="dob">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="account_holder_name" class="col-sm-2 col-form-label">Mobile:</label>
+                            <div class="col-sm-10">
+                            <input type="text" class="form-control" value="{{ emp.mobile }}" disabled id="mobile" name="mobile">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="ifsc_code" class="col-sm-2 col-form-label">Address:</label>
+                            <div class="col-sm-10">
+                            <input type="text" class="form-control" value="{{ emp.address  }}" disabled id="address" name="address">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="ifsc_code" class="col-sm-2 col-form-label">Pincode:</label>
+                            <div class="col-sm-10">
+                            <input type="text" class="form-control" value="{{ emp.pincode }}" disabled id="pincode" name="pincode">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="ifsc_code" class="col-sm-2 col-form-label">City:</label>
+                            <div class="col-sm-10">
+                            <input type="text" class="form-control" value="{{ emp.city }}" disabled id="city" name="city">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="pan_no" class="col-sm-2 col-form-label">State:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" value="{{ emp.state }}" disabled id="state" name="state">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div id="employeedetail" class="container-fluid">
+        <div class="row py-2">
+            <div  class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h1 class="text-center">Employee  Details </h1>
+                            <button type="button"class="btn btn-primary" onclick="editForm()" >Add Employee Detail</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div id="employeeform"  class="container-fluid employeeform">
+        <div class="row py-2">
+            <div  class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h1 class="text-center">Employee Details </h1>
+                            <button type="button" class="btn btn-primary"onclick="showDetail()" >Show Employee Detail</button>
+                        </div>
+                        <form method="post"  enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <label for="bank_name" class="col-sm-2 col-form-label">Name:</label>
+                            <div class="col-sm-10">
+                            <input type="text" required  class="form-control" value="{% if emp.name %}{{ emp.name }}{% endif %}"  id="name" name="name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="bank_name" class="col-sm-2 col-form-label">Profile Image:</label>
+                            <div class="col-sm-10">
+                            <input  type="file" required class="form-contro" id="profile_image" value="{% if emp.profile_image %}{{ emp.profile_image }}{% endif %}" name="profile_image">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="branch_name" class="col-sm-2 col-form-label">Gender:</label>
+                            <div class="col-sm-10">
+                            <select  class="form-control" required id="gender" name="genderselect">
+                                {% if emp.gender == 'MALE' %}
+                                <option>----</option>
+                                <option value="MALE" selected>Male</option>
+                                <option value="FEMALE">Female</option>
+                                {% elif emp.gender == 'FEMALE' %}
+                                <option>----</option>
+                                <option value="MALE">Male</option>
+                                <option value="FEMALE" selected>Female</option>
+                                {% else %}
+                                <option>----</option>
+                                <option value="MALE">Male</option>
+                                <option value="FEMALE">Female</option>
+                                {% endif %}
+                            </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="bank_account_no" class="col-sm-2 col-form-label">Date of Birth:</label>
+                            <div class="col-sm-10">
+                            <input type="date" required class="form-control" value="{% if emp.dob %}{{ emp.dob|date:'Y-m-d' }}{% endif %}"   id="dob" name="dob">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="account_holder_name" class="col-sm-2 col-form-label">Mobile:</label>
+                            <div class="col-sm-10">
+                            <input type="text" required class="form-control" value="{% if emp.mobile%}{{ emp.mobile }}{% endif %}"  id="mobile" name="mobile">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="ifsc_code" class="col-sm-2 col-form-label">Address:</label>
+                            <div class="col-sm-10">
+                            <input type="text" required class="form-control" value="{% if emp.address %}{{ emp.address }}{% endif %}"  id="address" name="address">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="ifsc_code" class="col-sm-2 col-form-label">Pincode:</label>
+                            <div class="col-sm-10">
+                            <input type="text" required class="form-control" value="{% if emp.pincode  %}{{ emp.pincode  }}{% endif %}"  id="pincode" name="pincode">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="ifsc_code" class="col-sm-2 col-form-label">City:</label>
+                            <div class="col-sm-10">
+                            <input type="text" required class="form-control" value="{% if emp.city  %}{{ emp.city  }}{% endif %}"  id="city" name="city">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="pan_no" class="col-sm-2 col-form-label">State:</label>
+                            <div class="col-sm-10">
+                                <input type="text" required class="form-control" value="{% if emp.state  %}{{ emp.state  }}{% endif %}"  id="state" name="state">
+                            </div>
+                        </div>
+                            <div class="d-flex justify-content-center mt-5">
+                                <button type="submit" class="btn btn-primary" style="width: 30%">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+ function editForm() {
+    document.getElementById("employeedetail").style.display = "none";
+    document.getElementById("employeeform").style.display = "block";
+  }
+
+  function showDetail() {
+    document.getElementById("employeedetail").style.display = "block";
+    document.getElementById("employeeform").style.display = "none";
+  }
+  document.getElementById("profile11").classList.replace("side-nav", "active-side-nav");
+  document.getElementById("profile12").style.display = "block";
+  document.getElementById("profile22").classList.replace("header-nav", "active-nav");
+</script>
+
+{% endblock %}

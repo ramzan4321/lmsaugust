@@ -11,6 +11,7 @@ class Date:
     def get_next_working_days(self, num):
         _dates, count = [], 0
         _day = self._date
+        print("_day type: ", type(_day), _day)
         while num > count:
             if self.is_weekend(_day) or self.is_holiday(_day):
                 _day = _day + timedelta(days=1)

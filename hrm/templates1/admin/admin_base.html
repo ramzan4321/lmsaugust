@@ -1,0 +1,294 @@
+{% extends 'layouts/base.html' %} {% block title %} Dashboard {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="/static/css/button.css">
+{% endblock stylesheets %} {% block content %}
+
+<!-- Header -->
+<div class="header pb-8 pt-5 pt-md-6" style=background:#0466c8>
+  <div class="container-fluid">
+    <div class="header-body">
+      <!-- Card stats -->
+      <div class="row">
+        <div class="col-xl-3 col-lg-6">
+          <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Total Projects</h5>
+                  <span class="h2 font-weight-bold mb-0">3</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                    <i class="fa-solid fa-diagram-project"></i>
+                    <i class="fas fa-chart-bar"></i>
+                  </div>
+                </div>
+              </div>
+              <p class="mt-3 mb-0 text-muted text-sm">
+                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                <span class="text-nowrap">Since last month</span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-6">
+          <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0"> Project Submitted</h5>
+                  <span class="h2 font-weight-bold mb-0">2</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                    <i class="fas fa-chart-pie"></i>
+                  </div>
+                </div>
+              </div>
+              <p class="mt-3 mb-0 text-muted text-sm">
+                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                <span class="text-nowrap">Since last month</span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-6">
+          <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Employees</h5>
+                  <span class="h2 font-weight-bold mb-0">12</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                    <i class="fas fa-user"></i>
+                  </div>
+                </div>
+              </div>
+              <p class="mt-3 mb-0 text-muted text-sm">
+                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                <span class="text-nowrap">Since last month</span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-6">
+          <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Total Teams</h5>
+                  <span class="h2 font-weight-bold mb-0">2</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-info text-white rounded-circle shadow">
+                    <i class="fas fa-users"></i>
+                  </div>
+                </div>
+              </div>
+              <p class="mt-3 mb-0 text-muted text-sm">
+                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                <span class="text-nowrap">Since last month</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid mt--7"  >
+  <div class="row">
+    <div class="col-xl-7 mb-5 mb-xl-0">
+      <div class="card bg-gradient-secondary shadow">
+        <div class="card-header bg-white">
+          <div class="row align-items-center">
+            <div class="col">
+              <h6 class="text-uppercase text-transparent ls-1 mb-1"></h6>
+
+              <h2 class="text-dark mb-0">Events</h2>
+            </div>
+            <div class="table-responsive" id="tbl-event" style="height: 325px;">
+              <table class="table align-items-center " >
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">
+                      <div class="media align-items-center">
+                        <div class="media-body">
+
+                          <span class="mb-0 text-sm">Sorry, there are no upcoming events to display at this time. Please check back later.</span>
+
+                        </div>
+                      </div>
+                    </th>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-5">
+      <div class="card shadow " style = "width:100%;height:400px">
+        <div class="card-header bg-transparent">
+          <div id="holidaylist">
+            <div class="row align-items-center">
+                <div class="col">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="mb-0">UPCOMING  HOLIDAY</h3>
+                    &nbsp;&nbsp;
+                    <button type="button" onclick="addForm()" class="btn btn-primary">ADD  HOLIDAY</button>
+                  </div>
+                </div>
+            </div>
+            <div class="table-responsive" id="tbl-holiday" style="height: 300px;">
+              <table class="table table-hover align-items-center " >
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">DATE MONTH</th>
+                    <th scope="col">HOLIDAY NAME</th>
+                    <th scope="col">EDIT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for holidaylist in holidaylist %}
+                  <tr>
+                    <th scope="row">{{ holidaylist.holiday_date }}</th>
+                    <td id="holiday" style="word-wrap: break-word; word-break: break-all;white-space: normal;">
+                      {{ holidaylist.holiday_name }}
+                    </td>
+                    <td><button class="btn btn-primary" onclick="updateHolidays('{{holidaylist.id}}')">Edit</button>  <a href="/delete_holiday/{{holidaylist.id}}" class="btn btn-danger">Delete</a></td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        <div class="holidayform" id="holidayform">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="mb-0">ADD  HOLIDAY</h3>
+            &nbsp;&nbsp;
+            <button type="button" onclick="showholiday()" class="btn btn-primary">Show Holidays</button>
+          </div>
+          <form method="post" action="{% url 'holiday' %}" class="text-center">
+            {% csrf_token %}
+            <div class="form-group row">
+              <label for="holiday_name" class="col-sm-3 col-form-label">Holiday Name:</label>
+              <div class="col-sm-9">
+                <input type="text" required class="form-control" maxlength = "50" id="holiday_name" name="holiday_name">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="holiday_date" class="col-sm-3 col-form-label">Holiday Date:</label>
+              <div class="col-sm-9">
+                <input type="date" required class="form-control" id="holiday_date" name="holiday_date">
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-12">
+
+                <button type="submit"  class="btn btn-primary">Submit</button>
+
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="holidayform" id="updateholidayform">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="mb-0">Update  Holiday</h3>
+            &nbsp;&nbsp;
+            <!-- <button type="button" onclick="showholiday()" class="btn btn-primary">Show Holidays</button> -->
+          </div>
+          <form method="post" action="{% url 'holiday' %}" class="text-center">
+            {% csrf_token %}
+            <input type="hidden" name="holiday_id" value="" id="holiday_id">
+            <div class="form-group row">
+              <label for="holiday_name" class="col-sm-3 col-form-label">Holiday Name:</label>
+              <div class="col-sm-9">
+                <input type="text" required class="form-control" maxlength = "50" id="update_holiday_name" name="holiday_name" value="">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="holiday_date" class="col-sm-3 col-form-label">Holiday Date:</label>
+              <div class="col-sm-9">
+                <input type="date" required class="form-control" id="update_holiday_date" name="holiday_date" value="">
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-12">
+
+                <button type="submit"  class="btn btn-primary">Update</button>
+
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  {% include "includes/footer.html" %}
+
+
+<script>
+  function updateHolidays(id) {
+    console.log("Holiday ID: ", id)
+    $.ajax({
+				url: "/get_holiday/",
+				type: "get",
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				data: { 'id': id },
+				success: function (response) {
+					if (response['status'] === 'success') {
+						console.log("Success!")
+            document.getElementById("holiday_id").value = response['holiday']['holiday_id'];
+            document.getElementById("update_holiday_name").value = response['holiday']['holiday_name'];
+            document.getElementById("update_holiday_date").value = response['holiday']['holiday_date'];
+					}
+				}
+			});
+    document.getElementById("holidaylist").style.display = "none";
+    document.getElementById("holidayform").style.display = "none";
+    document.getElementById("updateholidayform").style.display = "block";
+  }
+   function addForm() {
+    document.getElementById("holidaylist").style.display = "none";
+    document.getElementById("holidayform").style.display = "block";
+  }
+
+  function showholiday() {
+    document.getElementById("holidayform").style.display = "none";
+    document.getElementById("holidaylist").style.display = "block";
+  }
+  document.getElementById("dash11").classList.replace("side-nav", "active-side-nav");
+  document.getElementById("dash12").style.display = "block";
+
+  $(document).ready(function() {
+    const myDiv = $('#tbl-event');
+    const myHDiv = $('#tbl-holiday')
+
+    if (myDiv.height() > 305) {
+      myDiv.addClass('overflow: hidden; overflow-y: scroll;');
+    } else {
+    }
+    if (myHDiv.height() > 280) {
+      myHDiv.addClass('overflow: hidden; overflow-y: scroll;');
+    } else {
+    }
+  });
+</script>
+{% endblock content %}

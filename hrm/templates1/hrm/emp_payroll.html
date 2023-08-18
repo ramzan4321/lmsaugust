@@ -1,0 +1,169 @@
+{% extends 'layouts/emp_base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/css/massege.css">
+<link rel="stylesheet" type="text/css" href="/static/css/payroll.css">
+<head>
+</head>
+<br>
+<div id="bankdetail" class="container-fluid mt-2" style=" border-radius: 10px; height:800px">
+  <div class="row">
+      <div class="col-md-7">
+      <h1>Pay Slips <i class="fa fa-download fa-2X" aria-hidden="true"></i></h1>
+      <span>Here You can manage all payslips generated till now.</span>
+    </div>
+    <div class="col-md-12">
+      <select class="custom-select mr-sm-2 my-3" id="yearselect" >
+        <option>Select Year</option>
+        {% for year in year %}
+        {% if year == curr_year %}
+        <option id="year" value="{{ year }}" selected>{{year}}</option>
+        {% else %}
+        <option id="year" value="{{ year }}">{{year}}</option>
+        {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="row" id="payslip-pdf">
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-header" style=background:#0466c8>
+          <h2 class="text-white">Pay slips</h2>
+        </div>
+        <div class="card-body">
+          <ul class="navbar-nav border">
+            {% for months in month_list %}
+            <a onclick="getpdf.call(this,'{{ forloop.counter }}')">
+              {% if month == forloop.counter %}
+              <button type="submit" class="btn btn-primary btn-sm mb-1 btn-active" id="active{{forloop.counter}}" style=height:35px;width:240px>{{ months }}</button>
+              {% else %}
+              <button type="submit" class="btn btn-outline-primary btn-sm mb-1" id="deactive{{forloop.counter}}" style=height:35px;width:240px>{{ months }}</button>
+              {% endif %}
+            </a>
+            {% endfor %}
+            <!-- <a onclick="getpdf.call(this,2)">
+              <button type="submit" class="btn btn-outline-primary btn-sm mb-1" style=height:35px;width:240px>February</button>
+            </a>
+
+            <a onclick="getpdf.call(this,3)">
+              <button type="submit" class="btn btn-outline-primary btn-sm mb-1" style=height:35px;width:240px>March</button>
+            </a>
+
+            <a onclick="getpdf.call(this,4)">
+              <button type="submit" class="btn btn-outline-primary btn-sm mb-1" style=height:35px;width:240px>April</button>
+            </a>
+
+            <a onclick="getpdf.call(this,5)">
+              <button type="submit" class="btn btn-outline-primary btn-sm mb-1"style=height:35px;width:240px >May</button>
+            </a>
+
+            <a onclick="getpdf.call(this,6)">
+              <button type="submit" class="btn btn-outline-primary btn-sm mb-1" style=height:35px;width:240px>June</button>
+            </a>
+
+            <a onclick="getpdf.call(this,7)">
+              <button type="submit" class="btn btn-outline-primary btn-sm mb-1" style=height:35px;width:240px>July</button>
+            </a>
+
+            <a onclick="getpdf.call(this,8)">
+              <button type="submit" class="btn btn-outline-primary btn-sm mb-1" style=height:35px;width:240px>August</button>
+            </a>
+
+            <a onclick="getpdf.call(this,9)">
+              <button type="submit" class="btn btn-outline-primary btn-sm mb-1" style=height:35px;width:240px>September</button>
+            </a>
+
+            <a onclick="getpdf.call(this,10)">
+              <button type="submit" class="btn btn-outline-primary btn-sm mb-1" style=height:35px;width:240px>October</button>
+            </a>
+
+            <a onclick="getpdf.call(this,11)">
+              <button type="submit" class="btn btn-outline-primary btn-sm mb-1" style=height:35px;width:240px>November</button>
+            </a>
+
+            <a onclick="getpdf.call(this,12)">
+              <button type="submit" class="btn btn-outline-primary btn-sm mb-1" style=height:35px;width:240px>December</button>
+
+            </a> -->
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9 ">
+      <div class="card payslip-pdf" >
+        <div class="card-header"style=background:#0466c8 >
+          <h4 id="payslimonth" class="text-white">{{ salary_month_name |date:"F Y" }} Payslip</h4>
+        </div>
+        {% if payslip.path %}
+        <div class="card-body bg-dark pdf" id="payslippdf" style="height: 500px;display: block;">
+          <embed src="/{{ payslip.path }}" width="100%" height="475" type="application/pdf">
+        </div>
+        {% else %}
+        <div id="not_found" style="height: 450px;display: block;">
+          <div style="height:400px;display: flex; justify-content: center;align-items: center;">
+            <img src="../../static/assets/img/icons/not-found.png" style="height:auto;width: 260px;">
+          </div>
+          <h2 style="text-align: center;" class="mb-4">No Payslip Generated</h2>
+        </div>
+        {% endif %}
+        <div id="not_found" style="height: 450px;display: none;">
+          <div style="height:400px;display: flex; justify-content: center;align-items: center;">
+            <img src="../../static/assets/img/icons/not-found.png" style="height:auto;width: 260px;">
+          </div>
+          <h2 style="text-align: center;" class="mb-4">Payslip Not Found</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function getpdf(e) {
+    monthname = this.children[0].innerHTML
+    year = document.getElementById("yearselect").value
+    pk = $('#bank_name').val()
+    const button_ = document.getElementsByClassName('btn-active');
+    var btn_id = button_[0].id.slice(6, button_[0].id.length);
+    const button = document.getElementById('active'+btn_id);
+    button.classList.remove('btn-primary');
+    button.classList.remove('btn-active');
+    button.classList.add('btn-outline-primary');
+    button.setAttribute('id', 'deactive'+btn_id);
+
+    const _button = document.getElementById('deactive'+e);
+    _button.classList.remove('btn-outline-primary');
+    _button.classList.add('btn-primary');
+    _button.classList.add('btn-active');
+    _button.setAttribute('id', 'active'+e);
+
+    year = document.getElementById("yearselect").value
+    $.ajax({
+      url: "payroll_expenses" + '/' + e + '/' + year + '/' + '?q=ajax',
+      type: "get",
+      data: { "year": year, "month": e },
+      success: function (response) {
+        monthyear = monthname +  ' ' +year
+        $('#payslimonth').html(monthyear+' '+'Payslip')
+        if (response['payslip'] == 'Not found') {
+          $("#payslippdf").css('display', 'none')
+          $("#not_found").css('display', 'block')
+        } else {
+          $("#payslippdf").css('display', 'block')
+          $("#not_found").css('display', 'none')
+          $("#payslippdf").children().attr('src', response.payslip)
+        }
+      },
+      error: function (xhr) {
+        alert("Please Select correct detail");
+      }
+    });
+  }
+  document.getElementById("payroll11").classList.replace("side-nav", "active-side-nav");
+  document.getElementById("payroll12").style.display = "block";
+  document.getElementById("payroll22").classList.replace("header-nav", "active-nav");
+</script>
+{% endblock %}

@@ -1,0 +1,194 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Profile {% endblock title %}
+
+{% block content %}
+
+<nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-0 md-4 mt-2">
+    <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+      <li class="breadcrumb-item">
+        <a href="#"><i class="fas fa-home"></i></a>
+      </li>
+      <li class="breadcrumb-item"><a href="#">Dashboards</a></li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Edit Profile
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        {{ emp.name }}
+      </li>
+    </ol>
+  </nav>
+
+  {% include "includes/admin-emp-profile-header.html" %}
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                   <h2> Edit Profile </h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="/update_emp_profile/">
+                      {% csrf_token %}
+                      <h6 class="heading-small text-muted mb-4">User information</h6>
+                      <div class="pl-lg-4">
+                        <div class="row">
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <input type="hidden" name="uid" value="{{ emp.user.id }}">
+                              <label class="form-control-label" for="input-username">Username</label>
+                              <input type="text" id="username" name="username" class="form-control" placeholder="Username" value="{{ emp.user.username }}">
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-email">Email address</label>
+                              <input type="email" id="email" name="email" class="form-control" placeholder="{{ emp.user.email }}" value="{{ emp.user.email }}">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-first-name">First name</label>
+                              <input type="text" id="input-first-name" name="first_name" class="form-control" placeholder="First name" value="{{ emp.user.first_name }}">
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-last-name">Last name</label>
+                              <input type="text" id="input-last-name" name="last_name" class="form-control" placeholder="Last name" value="{{ emp.user.last_name }}">
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-mobile">Contact</label>
+                              <input type="text" id="input-mobile" name="mobile" class="form-control" placeholder="Contact No." value="{{ emp.mobile }}">
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-dob">Date of birth</label>
+                              <input type="date" id="input-dob" name="dob" class="form-control" placeholder="Date of Birth" value="{{ emp.dob }}">
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-salary">Salary</label>
+                              <input type="text" id="input-salary" name="salary" class="form-control" placeholder="Employee Salary" value="{{ emp.salary }}">
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-about">About</label>
+                              <textarea id="input-about" name="about" class="form-control" placeholder="Last name" value="{{ emp.about }}" rows="5">{{ emp.about }}</textarea>
+                            </div>
+                          </div>
+                          
+                        </div>
+                      </div>
+                      <hr class="my-4" />
+                      <!-- Address -->
+                      <h6 class="heading-small text-muted mb-4">Contact information</h6>
+                      <div class="pl-lg-4">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-address">Address</label>
+                              <input id="input-address" name="address" class="form-control" placeholder="Home Address" value="{{ emp.address }}" type="text">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-4">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-city">City</label>
+                              <input type="text" id="input-city" name="city" class="form-control" placeholder="City" value="{{ emp.city }}">
+                            </div>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-state">State</label>
+                              <input type="text" id="input-state" name="state" class="form-control" placeholder="state" value="{{ emp.state }}">
+                            </div>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-pincode">Postal code</label>
+                              <input type="number" id="input-pincode" name="pincode" class="form-control" placeholder="{{ emp.pincode }}" value="{{ emp.pincode }}">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <hr class="my-4" />
+                      <!-- Bank Details -->
+                      <h6 class="heading-small text-muted mb-4">Bank information</h6>
+                      <div class="pl-lg-4">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-account_holder_name">Account Holder Name</label>
+                              <input id="input-account_holder_name" name="account_holder_name" class="form-control" placeholder="Account Holder Name" value="{{ emp.account_holder_name }}" type="text">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-4">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-bank_name">Bank Name</label>
+                              <input type="text" id="input-bank_name" name="bank_name" class="form-control" placeholder="Bank Name" value="{{ emp.bank_name }}">
+                            </div>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-bank_account_no">Account No</label>
+                              <input type="text" id="input-bank_account_no" name="bank_account_no" class="form-control" placeholder="Bank Account No" value="{{ emp.bank_account_no }}">
+                            </div>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-ifsc_code">IFSC Code</label>
+                              <input type="text" id="input-ifsc_code" name="ifsc_code" class="form-control" placeholder="{{ emp.ifsc_code }}" value="{{ emp.ifsc_code }}">
+                            </div>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-branch">Branch Name</label>
+                              <input type="text" id="input-branch" name="branch" class="form-control" placeholder="{{ emp.branch }}" value="{{ emp.branch }}">
+                            </div>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-pan_no">PAN No</label>
+                              <input type="text" id="input-pan_no" name="pan_no" class="form-control" placeholder="{{ emp.pan_no }}" value="{{ emp.pan_no }}">
+                            </div>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-pf_no">PF No</label>
+                              <input type="text" id="input-pf_no" name="pf_no" class="form-control" placeholder="{{ emp.pf_no }}" value="{{ emp.pf_no }}">
+                            </div>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-pf_uan">PF UAN</label>
+                              <input type="text" id="input-pf_uan" name="pf_uan" class="form-control" placeholder="{{ emp.pf_uan }}" value="{{ emp.pf_uan }}">
+                            </div>
+                          </div>
+                          <div class="col-lg-12">
+                            <div class="form-group">
+                              <button class="btn btn-success" type="submit">Update</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <hr class="my-4" />
+                    </form>
+                  </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

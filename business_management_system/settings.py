@@ -92,7 +92,7 @@ environ.Env.read_env()
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "lms_db",
+        "NAME": "new_lms_db",
         "USER": "postgres",
         "PASSWORD": "Sxua3zwKaxdEtGc6zUbC",
         "HOST": "lmsdb.c7jx7lbeqaog.ap-south-1.rds.amazonaws.com",
@@ -102,7 +102,7 @@ DATABASES = {
 
 
 #DATABASES = {
-#    'default': {
+#   'default': {
 #        'ENGINE': 'django.db.backends.sqlite3',
 #        'NAME': os.path.join(BASE_DIR, 'triodec')
 #    }
@@ -155,7 +155,8 @@ LOGIN_URL = "/login/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_FROM = "super_admin@triodec.com"
-SUPER_ADMIN_EMAILS= ["mayur@triodecsolutions.com", "shivani@triodecsolutions.com"]
+# SUPER_ADMIN_EMAILS= ["mayur@triodecsolutions.com", "shivani@triodecsolutions.com"]
+SUPER_ADMIN_EMAILS= ["ali.r@triodecsolutions.com"]
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = 'smtp.gmail.com'

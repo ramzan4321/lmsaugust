@@ -1,0 +1,148 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Profile {% endblock title %}
+
+{% block content %}
+{% include "includes/admin-emp-profile-header.html" %}
+<!-- <div class="card py-2" style="background-color: #fff;">
+  <div class="row py-2">
+    <div class="col-md-5">
+      <div class="border rounded px-2">
+        <h2 class="p-2">About</h2>
+        <div class="px-2">
+          <span class="text-muted">{{ emp.about }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7">
+      <div class="border rounded px-2">
+        <h2 class="p-2">Reporting Team</h2>
+        <div class="row">
+          {% for rep in reporting %}
+          <div class="col-md-4">
+          <div class="row p-2">
+            <div class="col-md-3 px-2">
+              <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="{{ rep.name }}" style="width: 50px ;">
+                <img alt="Image placeholder" src="{{ emp.profile_image.url }}">
+              </a>
+            </div>
+            <div class="col-md-9 mt--2">
+              <span class=""><small>{{ rep.name }}</small></span>
+              <span class="text-sm"><small>{{ rep.designation }}</small></span>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+<!-- Page content -->
+
+
+<!--div class="container-fluid mt-2">
+  <div class="row">
+    <div class="col-xl-4 order-xl-2">
+      <div class="card card-profile">
+        <img src="/static/assets/img/theme/img-1-1000x600.jpg" alt="Image placeholder" class="card-img-top">
+        <div class="row justify-content-center">
+          <div class="col-lg-3 order-lg-2">
+            <div class="card-profile-image">
+              <a href="#">
+                <img src="{{ emp.image.url }}" class="rounded-circle">
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+          <div class="d-flex justify-content-between">
+            <a href="#" class="btn btn-sm btn-info  mr-4 ">Connect</a>
+            <a href="#" class="btn btn-sm btn-default float-right">Message</a>
+          </div>
+        </div>
+        <div class="card-body pt-0">
+          <div class="text-center">
+            <h5 class="h3">
+              {{ emp.name }}
+            </h5>
+            <div class="h5 font-weight-300">
+              Date of Joined : {{ joining_date }}
+            </div>
+            <div class="h5 mt-4">
+              <i class="ni business_briefcase-24 mr-2"></i>
+              {% if emp.role == 'STE' %}
+              Standard Employee - Triodec Solutions LLP
+              {% else %}
+              Senior Employee - Triodec Solutions LLP
+              {% endif %}
+            </div>
+            <div>
+              <i class="ni education_hat mr-2"></i> {{ emp.designation }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="card-profile-stats d-flex justify-content-center">
+                <div>
+                  <span class="heading">{{ proj }}</span>
+                  <span class="description">Projects</span>
+                </div>
+                <div>
+                  <span class="heading">{{ task_as }}</span>
+                  <span class="description text-sm">Task <small>(Assigned)</small></span>
+                </div>
+                <div>
+                  <span class="heading">{{ task_com }}</span>
+                  <span class="description">Task <small>(Finished)</small></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr class="m-0 p-0">
+          <div class="row">
+            <div class="col">
+              <div class="card-profile-stats d-flex justify-content-center">
+                <div>
+                  <span class="heading">{{ leave_taken }}</span>
+                  <span class="description">Total <small>(Leaves)</small></span>
+                </div>
+                <div>
+                  <span class="heading">{{ paid_leave }}</span>
+                  <span class="description">Paid <small>(Leaves)</small></span>
+                </div>
+                <div>
+                  <span class="heading">{{ unpaid_leave }}</span>
+                  <span class="description">UnPaid <small>(Leaves)</small></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-8 order-xl-1">
+      <div class="card">
+        <div class="card-header">
+          <div class="row align-items-center">
+            <div class="col-8">
+              <h3 class="mb-0">Edit profile </h3>
+            </div>
+            <div class="col-4 text-right">
+              <a href="#!" class="btn btn-sm btn-primary">Settings</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div-->
+
+
+</div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}{% endblock javascripts %}

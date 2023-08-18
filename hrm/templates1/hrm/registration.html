@@ -1,0 +1,195 @@
+<!--
+
+=========================================================
+* Argon Dashboard - v1.1.2
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/argon-dashboard
+* Copyright 2020 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md)
+
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>
+    Triodec Dashboard
+  </title>
+  <link rel="canonical" href="https://appseed.us/admin-dashboards/django-dashboard-argon">
+
+  <!-- Favicon -->
+  <link href="/static/assets/img/brand/01.png" rel="icon" type="image/png">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+  <!-- Icons -->
+  <link href="/static/assets/js/plugins/nucleo/css/nucleo.css" rel="stylesheet" />
+  <link href="/static/assets/js/plugins/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link href="/static/assets/css/argon-dashboard.css?v=1.1.2" rel="stylesheet" />
+  {% block stylesheets %}
+  <link rel="stylesheet" type="text/css" href="/static/css/button.css">
+  {% endblock stylesheets %}
+</head>
+
+<body>
+  <div class="main-content"style=background:#0466c8>
+    <!-- Navbar -->
+    <nav class="navbar navbar-top navbar-expand navbar-dark bg-secondary border-bottom py-2 mt-3">
+
+      <a class="navbar-brand ml-3" href="register/">
+        <img src="/static/assets/img/brand/triodeclogo.png" style=" width:165px;height:40px" />
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse-main" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </nav>
+    <!-- Header -->
+    <div class="header  py-7 py-lg-8"style=background:#0466c8>
+      <div class="container">
+        <div class="header-body text-center mb-7">
+          <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-6">
+              <h1 class="text-white">Triodec Solutions</h1>
+              <p class="text-lead text-light">Manage by Triodec</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  <div class="container mt--8 pb-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-5 col-md-7">
+        <div class="card bg-secondary shadow border-0">
+
+          <div class="card-body px-lg-5 py-lg-5">
+            <div class="text-center text-dark mb-4">
+              <h3><b> Sign up </b></h3>
+            </div>
+            <div class="main-content" id="panel">
+
+              {% if messages %} {% for message in messages %}
+              <div class="alert alert-{{message.tags}} django-message" id="my-div" role="alert">
+                <strong style="text-transform: capitalize;">{{ message.tags }}!</strong> {{ message }}
+              </div>
+              {% endfor %} {% endif %}
+
+            </div>
+            <form role="form" method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <ul id="user-info">
+                  <li><span class="text-muted" style="font-size: 12px;"><b>Username: </b> must be 8 characters long.</span></li>
+                  <li><span class="text-muted" style="font-size: 12px;"><b>Password: </b> must be 8 characters long and contains both letters and numbers.</span></li>
+                </ul>
+                <div class="input-group input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                  </div>
+                  <input type="text" required class="form-control" placeholder="Username" value=""  name= username >
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-group input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                  </div>
+                  <input type="email" required class="form-control" placeholder="Email" value="" name=email >
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-group input-group-alternative">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                  </div>
+                  <input type="password" required class="form-control" placeholder="Password" value="" name='password1'>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-group input-group-alternative">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                  </div>
+                  <input type="password" required class="form-control" placeholder="Confirm Password" value="" name='password2'>
+                </div>
+              </div>
+              <div class="row my-4">
+                <div class="col-12">
+                  <div class="custom-control custom-control-alternative custom-checkbox" >
+                    <input class="custom-control-input" id="customCheckRegister" type="checkbox">
+                    <label class="custom-control-label" for="customCheckRegister">
+                      <span class="text-muted">I agree with the <a href="#!">Privacy Policy</a></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary mt-4">Create account</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-6">
+            <a href="#" class="text-light"><small></small></a>
+          </div>
+          <div class="col-6 text-right">
+            <a href="/login/" class="text-light"><small>Already have Account</small></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Footer -->
+  <footer class="py-5">
+    <div class="container">
+      <div class="row align-items-center justify-content-xl-between">
+        <div class="col-xl-6">
+          <div class="copyright text-center text-xl-left text-muted" id="copyright">
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  </div>
+  {% include "includes/scripts.html" %}
+  <!--   Core   -->
+  <!--<script src="/static/assets/js/plugins/jquery/dist/jquery.min.js"></script>-->
+  <!--<script src="/static/assets/js/plugins/bootstrap/dist/js/bootstrap.bundle.min.js"></script>-->
+  <!--   Optional JS   -->
+  <!--   Argon JS   -->
+  <!--<script src="/static/assets/js/argon-dashboard.min.js?v=1.1.2"></script>-->
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  {% if messages %}
+  <script>
+    $("#user-info").hide(300);
+    // var elem = document.getElementById('user-info');
+    // elem.style.display = "none";
+  </script>
+  {% endif %}
+  <script>
+    var year = new Date().getFullYear();
+    $("#copyright").append(`© ${year} <a href="http://www.triodec.com" style=color:#fff target="_blank">Triodec Solutions</a>`);
+
+    window.TrackJS &&
+      TrackJS.install({
+        token: "ee6fab19c5a04ac1a32a645abde4613a",
+        application: "argon-dashboard-free"
+      });
+  </script>
+  <script type="text/javascript">
+    setTimeout(function () {
+      $("#my-div").fadeOut('slow');
+      $("#user-info").show(300);
+    }, 15000);
+  </script>
+</body>
+</html>

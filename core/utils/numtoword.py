@@ -113,3 +113,10 @@ def numtowords(n):
         else:
             word += "Zero"
     return word
+
+def fix_to_two_digit(num):
+    _num = str(num).rstrip('0').rstrip('.')
+    if len(_num) > 1:
+        return _num
+    else:
+        return '0'+_num

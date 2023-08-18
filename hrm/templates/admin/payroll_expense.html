@@ -1,17 +1,218 @@
 {% extends 'layouts/base.html' %} {% load crispy_forms_tags %} {% block content %}
 
-<div class="modal fade bd-example-modal-lg " tabindex="-1" role="dialog" id="payrolltabel" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl pl-3 mt-0" style="float: right;width: 100%;">
+<div class="modal fade payslip-edit" tabindex="-1" role="dialog" id="payroll-edit-form"
+  aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl pl-3 mt-0" style="width: 100%;">
     <div class="modal-content">
-      <div id="bankdetail"class="container-fluid">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12 mt-3 mb-2 text-center">
+            <h2 class=""> Edit Payroll Details </h2>
+            <hr class="my-0" style="width: 90%;">
+          </div>
+          
+          <div class="col-md-12 my-2">
+            <div class="alert alert-warning django-message my-1" id="error-message" role="alert" style="display: none;">
+              
+            </div>
+            <form method="post" enctype="multipart/form-data" action="/get_payroll_info/">
+              {% csrf_token %}
+              <input type="hidden" value="" id="payroll_id" name="payroll_id">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-md-6 pr-4">
+                    <h3 class="text-center card-title">Leave Adjustment</h3>
+
+                    <div class="form-group row">
+                      <label for="bank_name" class="form-label col-sm-4">Leave reason:</label>
+                      <!-- <div class="col-sm-10"> -->
+                        <textarea type="text" class="form-control col-sm-8" id="leave_reason"
+                          name="leave_reason"></textarea>
+                      <!-- </div> -->
+                    </div>
+                    <div class="form-group row">
+                      <label for="bank_name" class="form-label col-sm-4">Leave Days:</label>
+                      <!-- <div class="col-sm-10"> -->
+                        <input type="number" class="form-control col-sm-8" id="leave_days" name="leave_days" oninput="calculate_payroll()">
+                      <!-- </div> -->
+                    </div>
+                    <div class="form-group row">
+                      <label for="bank_name" class="form-label col-sm-4">Leave Start Date:</label>
+                      <!-- <div class="col-sm-10"> -->
+                        <input type="date" class="form-control col-sm-8" min="{{date}}" oninput="calculate_payroll()" id="leave_start_date"
+                          name="leave_start_date">
+                      <!-- </div> -->
+                    </div>
+                    <div style="display: none;" id="team1" >
+                    <div class="d-flex justify-content-between align-items-center mt--3 pb-3">
+                      <!-- <div class="col-md-2"> -->
+                        <label for="bank_name" class="form-label"></label>
+                      <!-- </div> -->
+                        <!-- <div class="col-md-10"> -->
+    
+                          <div class="avatar-group d-flex py-2" style="align-items:center;" id="team2">
+    
+                          </div>
+                        <!-- </div> -->
+                    </div>
+                  </div>
+                    <div class="form-group row">
+                      <label for="bank_name" class="form-label col-sm-4">Leave Requested For:</label>
+                      <!-- <div class="col-sm-10"> -->
+                        <select name="leave_requested_for" class="form-control col-sm-8" id="id_leave_for" oninput="calculate_payroll()">
+                          <option value="F">Full Day</option>
+                          <option value="FH">First Half</option>
+                          <option value="SH">Second Half</option>
+                        </select>
+                      <!-- </div> -->
+                    </div>
+                    <div class="form-group row">
+                      <label for="bank_name" class="form-label col-sm-4">Leave type:</label>
+                      <!-- <div class="col-sm-10"> -->
+                        <select name="leave_type" class="form-control col-sm-8" id="id_leave_type" oninput="calculate_payroll()">
+                          <option value="PAID">PAID</option>
+                          <option value="UNPAID">UNPAID</option>
+                        </select>
+                      <!-- </div> -->
+                    </div>
+                  </div>
+
+                  <div class="col-md-6" style="border-left: 1px solid rgb(209, 209, 209);">
+                    <h3 class="text-center card-title">Addition/Deduction Adjustment</h3>
+                    <div class="form-group row">
+                      <label for="employee_name" class="col-sm-4 col-form-label">Employee:</label>
+                      <div class="col-sm-8">
+                        <input type="text" readonly class="form-control" value="" id="emp_name" name="emp_name">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="department" class="col-sm-4 col-form-label">Department:</label>
+                      <div class="col-sm-8">
+                        <input type="text" readonly class="form-control" value="" id="department" name="department">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="addition_title" class="col-sm-4 col-form-label">Addition Title:</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" value="" id="addition_title"
+                          name="addition_title" placeholder="Title can be max 30 charachters.">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="addition_amount" class="col-sm-4 col-form-label">Addition Amount:</label>
+                      <div class="col-sm-8">
+                        <input type="number" min="0" class="form-control" value="" id="addition_amount"
+                          name="addition_amount" oninput="calculate_payroll()">
+                      </div>
+                    </div>
+                    <hr class="mt-1 mb-3">
+                    <div class="form-group row">
+                      <label for="deduction_title" class="col-sm-4 col-form-label">Deduction Title:</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" value="" id="deduction_title"
+                          name="deduction_title" placeholder="Title can be max 30 charachters.">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="deduction_amount" class="col-sm-4 col-form-label">Deduction Amount:</label>
+                      <div class="col-sm-8">
+                        <input type="number" min="0" class="form-control" value="" id="deduction_amount"
+                          name="deduction_amount" oninput="calculate_payroll()">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr class="my-2">
+                <div class="row">
+                  <div class="col-md-12">
+                    <h3 class="text-center card-title">Summary</h3>
+
+                    <div class="form-group row">
+                      <label for="deduction" class="col-sm-2 col-form-label">Total Deduction:</label>
+                      <div class="col-sm-4">
+                        <input type="text" readonly class="form-control" value="" id="deduction" name="deduction">
+                      </div>
+                      <label for="total_addition" class="col-sm-2 col-form-label">Total Addition:</label>
+                      <div class="col-sm-4">
+                        <input type="text" readonly class="form-control" value="" id="total_addition" name="total_addition">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="full_day" class="col-sm-2 col-form-label">Full Day:</label>
+                      <div class="col-sm-4">
+                        <input type="number" min="0" readonly class="form-control" value="" id="full_day" name="full_day">
+                      </div>
+                      <label for="half_day" class="col-sm-2 col-form-label">Half Day:</label>
+                      <div class="col-sm-4">
+                        <input type="number" min="0" readonly class="form-control" value="" id="half_day" name="half_day">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="earning" class="col-sm-2 col-form-label">Earning:</label>
+                      <div class="col-sm-10">
+                        <input type="text" readonly class="form-control" value="" id="earning" name="earning">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="salary" class="col-sm-2 col-form-label">Salary:</label>
+                      <div class="col-sm-10">
+                        <input type="text" readonly class="form-control" value="" id="salary" name="salary">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="effective_work_days" class="col-sm-2 col-form-label">Effective Work Days:</label>
+                      <div class="col-sm-10">
+                        <input type="text" readonly class="form-control" value="" id="effective_work_days"
+                          name="effective_work_days">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="loss_pay_days" class="col-sm-2 col-form-label">Loss Pay Days:</label>
+                      <div class="col-sm-10">
+                        <input type="hidden" readonly class="form-control" value="" id="lop"
+                          name="lop">
+                        <input type="text" readonly class="form-control" value="" id="loss_pay_days"
+                          name="loss_pay_days">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="total_pay_days" class="col-sm-2 col-form-label">Total Pay Days:</label>
+                      <div class="col-sm-10">
+                        <input type="text" readonly class="form-control" value="" id="total_pay_days"
+                          name="total_pay_days">
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-5">
+                      <button type="submit" class="btn btn-primary" id="edit-button" style="width: 20%">Update</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade bd-example-modal-xl " tabindex="-1" role="dialog" id="payrolltabel"
+  aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl pl-3 mt-0 mw-100" style="margin-left:200px; width: 90%;">
+    <div class="modal-content">
+      <div id="bankdetail" class="container-fluid">
         <div class="row">
           <div class="col-md-12 my-4">
-            <h1>Pay Slips<a href=" " id="downloadpdf">  <i class="fa fa-download fa-2X" aria-hidden="true"></i></a></h1>
+            <h1>Pay Slips<a href=" " id="downloadpdf"> <i class="fa fa-download fa-2X" aria-hidden="true"></i></a></h1>
             <span>Here You can manage all payslips generated till now.</span>
           </div>
           <div class="col-md-7">
             <select class="custom-select mr-sm-2 my-3" id="yearselect" style="width: 23%;">
-              <option >Select Year</option>
+              <option>Select Year</option>
               {% for year in year %}
               {% if year == curr_year %}
               <option value="{{ year }}" selected>{{year}}</option>
@@ -32,7 +233,9 @@
                 <ul class="navbar-nav border">
                   {% for months in month_list %}
                   <a>
-                    <button type="submit" onclick="getpdf({{ forloop.counter }})" class="btn btn-outline-primary btn-sm mb-1" id="deactive{{forloop.counter}}" style="height:35px;width:195px">{{ months }}</button>
+                    <button type="submit" onclick="getpdf('{{ forloop.counter }}')"
+                      class="btn btn-outline-primary btn-sm mb-1" id="deactive{{forloop.counter}}"
+                      style="height:35px;width:195px">{{ months }}</button>
                   </a>
                   {% endfor %}
                 </ul>
@@ -40,11 +243,11 @@
             </div>
           </div>
           <div class="col-md-9 ">
-           <div class="card payslip-pdf" style="width:100%;">
-              <div class="card-header "style=background:#0466c8>
+            <div class="card payslip-pdf" style="width:100%;">
+              <div class="card-header " style=background:#0466c8>
                 <h4 class="text-white">{{ salary_month_name |date:"F Y" }} Payroll</h4>
               </div>
-              <div class="card-body bg-dark pdf" id="payslippdf" employee_id ="" style="height: 500px;display: block;">
+              <div class="card-body bg-dark pdf" id="payslippdf" employee_id="" style="height: 500px;display: block;">
                 <embed src=" " width="100%" height="475" type="application/pdf">
               </div>
               <div id="not_found" style="height: 450px;display: none;">
@@ -65,41 +268,41 @@
   </div>
 </div>
 <div class="container-fluid" style="background-color: white; border-radius: 10px">
-<br>
-<br>
-  <div class="card bg-light "  style="border-radius: 10px">
+  <br>
+  <br>
+  <div class="card bg-light " style="border-radius: 10px">
 
     <div class="row pt-2 flex-row flex-nowrap" style="overflow-x: scroll;">
       {% for x in months %}
       <div class="col-md-2" id="month-card'{{ forloop.counter }}'">
         <!-- <div class="card-5 ml-3 mr-3 mb-4 mt-4"> -->
-          <div class="card-5 mx-2">
-          <a
-            href='/payroll_expenses/{{x |date:"n"}}/{{x |date:"Y"}}/'
-            style="text-decoration: none; color: black">
+        <div class="card-5 mx-2">
+          <a href='/payroll_expenses/{{x |date:"n"}}/{{x |date:"Y"}}/' style="text-decoration: none; color: black">
             <div class="card hover">
               <div class="card-body pt-3 pb-2">
                 <!-- <div class="card-title  ml-6 mb-0">{{ x | date:"M Y" }}</div> -->
                 <div class="card-title mb-0 text-center">{{ x | date:"M Y" }}</div>
                 <!-- <div class="card-text ml-5  text-muted "> -->
-                  <div class="card-text text-muted text-center">
+                <div class="card-text text-muted text-center">
                   1 {{ x | date:"M" }} -{{ x | date:"t M" }}
                 </div>
               </div>
-              <div class="card pt-1 mt-2 mb-3" >
+              <div class="card pt-1 mt-2 mb-3">
                 {% if cur.year == x.year %}
-                  {% if cur.month > x.month %}
-                  <span  class="btn btn-primary btn-sm  " style="background:#0466c8" id="'{{ forloop.counter }}'">Completed</span>
-                  {% elif cur.month == x.month %}
-                  <span class="btn btn-success btn-sm active-month" id="'{{ forloop.counter }}'">Current</span>
-                  {% elif cur.month < x.month %}
-                  <span class="btn btn-secondary btn-sm " id="'{{ forloop.counter }}'">Upcoming</span>
+                {% if cur.month > x.month %}
+                <span class="btn btn-primary btn-sm  " style="background:#0466c8"
+                  id="'{{ forloop.counter }}'">Completed</span>
+                {% elif cur.month == x.month %}
+                <span class="btn btn-success btn-sm active-month" id="'{{ forloop.counter }}'">Current</span>
+                {% elif cur.month < x.month %} <span class="btn btn-secondary btn-sm " id="'{{ forloop.counter }}'">
+                  Upcoming</span>
                   {% endif %}
-                {% elif cur.year > x.year %}
-                <span class="btn btn-primary btn-sm " style="background:#0466c8" id="'{{ forloop.counter }}'">Completed</span>
-                {% elif cur.year < x.year %}
-                <span class="btn btn-secondary btn-sm " id="'{{ forloop.counter }}'">Upcoming</span>
-                {% endif %}
+                  {% elif cur.year > x.year %}
+                  <span class="btn btn-primary btn-sm " style="background:#0466c8"
+                    id="'{{ forloop.counter }}'">Completed</span>
+                  {% elif cur.year < x.year %} <span class="btn btn-secondary btn-sm " id="'{{ forloop.counter }}'">
+                    Upcoming</span>
+                    {% endif %}
               </div>
             </div>
           </a>
@@ -146,130 +349,359 @@
   <div class="row">
     <div class="col-md-12">
       <div class="card p-2">
-        <div class="card-header bg-light">
-          <form action="/payroll_expenses/" method="POST">
+        <div class="card-header bg-light d-flex justify-content-between">
+          <form class="form-inline" action="/payroll_expenses/" method="POST">
             {% csrf_token %}
+            <select class="form-group form-control mx-2" name="selected_employee">
+              <option value="ALL">All Employee</option>
+              {% for employee in employees %}
+              <option value="{{employee.user}}">{{ employee.name }}</option>
+              {% endfor %}
+            </select>
             <button type="submit" class="btn btn-primary btn-fw" style=background:#0466c8> Run Payroll</button>
           </form>
-          </span></a>
+          <!-- </span></a> -->
+          <div class="flex">
+            {% if payslips %}
+            {% if admin_confirmation %}
+            {% if not dispatched_payslip %}
+            <a href="/send_payslip/" class="btn btn-primary">Email Payslip</a>
+            {% endif %}
+            {% else %}
+            <a href="/proceed_salary/" class="btn btn-success">Proceed</a> <a href="/stop_payslip/"
+              class="btn btn-danger">Stop</a>
+            {% endif %}
+            {% endif %}
+          </div>
         </div>
         <div class="card-body">
-        {% if payslips %}
-        <table class="table table-hover table-striped">
+          {% if payslips %}
+          <table class="table table-hover table-striped">
             <thead>
               <tr>
                 <th scope="col">S.no</th>
                 <th scope="col">Employee</th>
                 <th scope="col">Department</th>
-                <th scope="col">Full Day Leave</th>
-                <th scope="col">Half Day Leave</th>
-                <th scope="col">Deduction</th>
-                <th scope="col">Salary</th>
-                <th scope="col">Earning</th>
+                <th scope="col" class="text-right">Full Day Leave</th>
+                <th scope="col" class="text-right">Half Day Leave</th>
+                <th scope="col" class="text-right">Deduction</th>
+                <th scope="col" class="text-right">Addition</th>
+                <th scope="col" class="text-right">Salary</th>
+                <th scope="col" class="text-right">Earning</th>
+                <th scope="col">Edit</th>
               </tr>
             </thead>
             <tbody id="employee">
-                {% for payslip in payslips%}
-              <tr
-                data-toggle="modal" data-target=".bd-example-modal-lg"  >
-                <th scope="row">{{ forloop.counter }}</th>
-                <td><li style="cursor:pointer;" class="nav-link" onclick="getallpdf('{{ payslip.employee_payslip.id }}', '{{payslip.path}}', '{{payslip.dispatch_date.month|add:-1}}')">{{ payslip.employee_payslip.name }}</li></td>
-                <td>{{ payslip.employee_payslip.department }}</td>
-                <td>{{ payslip.full_day }}</td>
-                <td>{{ payslip.half_day }}</td>
-                <td>{{ payslip.deduction }}</td>
-                <td>{{ payslip.employee_payslip.salary }}</td>
-                <td>{{ payslip.earning }}</td>
-              </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-            {% else %}
+              {% for payslip in payslips%}
               <tr>
-                <td>Payslip Not Generate For This Month</td>
+                <th scope="row">{{ forloop.counter }}</th>
+                {% if payslip.admin_confirmation %}
+                <td data-toggle="modal" data-target="#payrolltabel">
+                  <li style="cursor:pointer;" class="nav-link"
+                    onclick="getallpdf('{{ payslip.employee_payslip.id }}', '{{payslip.path}}', '{{payslip.dispatch_date.month|add:-1}}')">
+                    {{ payslip.employee_payslip.name }}</li>
+                </td>
+                {% else %}
+                <td>
+                  <li class="nav-link">{{ payslip.employee_payslip.name }}</li>
+                </td>
+                {% endif %}
+                <td>{{ payslip.employee_payslip.department }}</td>
+                <td class="text-right">{{ payslip.full_day }}</td>
+                <td class="text-right">{{ payslip.half_day }}</td>
+                <td class="text-right">{{ payslip.deduction }}<span style="color:red;"> dr</span></td>
+                <td class="text-right">{{ payslip.addition_amount }}<span style="color:green;"> cr</span></td>
+                <td class="text-right">{{ payslip.employee_payslip.salary }}</td>
+                <td class="text-right">{{ payslip.earning }}</td>
+                <td><button class="btn btn-sm btn-primary" onclick="edit_payroll('{{ payslip.id }}')">Edit</button></td>
               </tr>
-            {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <tr>
+            <td>Payslip Not Generate For This Month</td>
+          </tr>
+          {% endif %}
+        </div>
       </div>
+      <hr class="mt-1" style="background-color: lightgray; width: 95%" />
     </div>
-    <hr class="mt-1" style="background-color: lightgray; width: 95%" />
   </div>
-</div>
-{% endblock %}
-{% block javascripts %}
-<script type="text/javascript">
-  function getallpdf(employee_id, path, month){
-    const _button = document.getElementById('deactive'+month);
-    _button.classList.remove('btn-outline-primary');
-    _button.classList.add('btn-primary');
-    _button.classList.add('btn-active');
-    _button.setAttribute('id', 'active'+month);
-    $("#payslippdf").children().attr('src', '/'+path);
-    $("#downloadpdf").attr('href', '/'+path);
-    $("#payslippdf").attr('employee_id', employee_id);
-    $('#payrolltabel').modal('show');
-  }
+  {% endblock %}
+  {% block javascripts %}
+  <script type="text/javascript">
+    var lop = 0;
+    var fullDay = 0;
+    var halfDay = 0;
+    var deducted = 0;
+    function getallpdf(employee_id, path, month) {
+      const _button = document.getElementById('deactive' + month);
+      _button.classList.remove('btn-outline-primary');
+      _button.classList.add('btn-primary');
+      _button.classList.add('btn-active');
+      _button.setAttribute('id', 'active' + month);
+      $("#payslippdf").children().attr('src', '/' + path);
+      $("#downloadpdf").attr('href', '/' + path);
+      $("#payslippdf").attr('employee_id', employee_id);
+      $('#payrolltabel').modal('show');
+    }
 
-  function getpdf(month){
-    console.log(month)
-    const button_ = document.getElementsByClassName('btn-active');
-    console.log("button: "+button_[0].id)
-    var btn_id = button_[0].id.slice(6, button_[0].id.length);
-    const button = document.getElementById('active'+btn_id);
-    button.classList.remove('btn-primary');
-    button.classList.remove('btn-active');
-    button.classList.add('btn-outline-primary');
-    button.setAttribute('id', 'deactive'+btn_id);
-    console.log("ID: "+'deactive'+btn_id)
+    function edit_payroll(payroll_id) {
+      console.log("Payslip Id: ", payroll_id)
+      $.ajax({
+        url: "/get_payroll_info/",
+        type: "get",
+        data: { 'payroll_id': payroll_id },
+        success: function (response) {
+          console.log("Payslip: " + response)
+          $("#payroll_id").attr('value', payroll_id);
+          $("#emp_name").attr('value', response['employee']);
+          $("#department").attr('value', response['department']);
+          $("#full_day").attr('value', response['full_day']);
+          $("#half_day").attr('value', response['half_day']);
+          $("#deduction").attr('value', response['deduction']);
+          $("#earning").attr('value', response['earning']);
+          $("#salary").attr('value', response['salary']);
+          $("#effective_work_days").attr('value', response['effective_work_days']);
+          $("#loss_pay_days").attr('value', response['loss_pay_days']);
+          $("#total_pay_days").attr('value', response['total_pay_days']);
+          $("#addition_title").attr('value', response['addition_title']);
+          $("#addition_amount").attr('value',response['addition_amount']);
+          $("#deduction_title").attr('value', response['deduction_title']);
+          $("#deduction_amount").attr('value',response['deduction_amount']);
+          lop = parseInt(response['loss_pay_days']);
+          fullDay = parseInt(response['full_day']);
+          halfDay = parseInt(response['half_day']);
+          deducted = parseInt(response['deduction'])
+        },
+        error: function (xhr) {
+          alert("request fail");
+        }
+      });
+      $('#payroll-edit-form').modal('show');
+    }
 
-    const _button = document.getElementById('deactive'+month);
-    console.log("_button: "+_button.id)
-    _button.classList.remove('btn-outline-primary');
-    _button.classList.add('btn-primary');
-    _button.classList.add('btn-active');
-    _button.setAttribute('id', 'active'+month);
-    console.log("ID: "+'active'+month)
 
-    empid = $("#payslippdf").attr('employee_id')
-    year = document.getElementById("yearselect").value
-    $.ajax({
-      url: "/payroll_expenses" + '/' + month + '/' + year + '/' ,
-      type: "get",
-      data: { 'employee_id':empid },
-      success: function (response) {
-        console.log("Payslip: "+response.payslip)
-        if (response['payslip'] == 'Not found') {
-          $("#payslippdf").css('display', 'none')
-          $("#not_found").css('display', 'block')
-          $("#downloadpdf").attr('href', "")
+    function calculate_payroll() {
+      console.log("line 487")
+      var salary = parseInt(document.getElementById('salary').value);
+      const today = new Date();
+      var flag = true;
+      today.setDate(1);
+      today.setDate(today.getDate() - 1);
+      
+      const totalDays = today.getDate();
+
+      let leave_days = parseInt(document.getElementById('leave_days').value);
+      let _leave_type = document.getElementById('id_leave_type').value;
+      let _leave_for = document.getElementById('id_leave_for').value;
+      let _fullDay = fullDay;
+      let _halfDay = halfDay;
+      let leave_deduction = 0;
+
+      let addition_title = document.getElementById('addition_title').value;
+      let addition_amount = parseInt(document.getElementById('addition_amount').value);
+      let deduction_title = document.getElementById('deduction_title').value;
+      let deduction_amount = parseInt(document.getElementById('deduction_amount').value);
+      
+      let start_date = new Date(document.getElementById('leave_start_date').value);
+      let _start_date_month = start_date
+      _start_date_month.setDate(1)
+      let start_date_month = _start_date_month.getMonth()
+
+      // console.log("Start date month : ", start_date_month, today.getMonth())
+      
+      if ((_leave_type == 'UNPAID') && (today.getMonth() == start_date_month)) {
+        if (_leave_for == 'F') {
+          var leave_for = 1;
+          _fullDay = fullDay + leave_days;
+          // console.log("Line 519: ", _fullDay)
         } else {
-          $("#payslippdf").css('display', 'block')
-          $("#error").css('display', 'none')
-          $("#payslippdf").children().attr('src', '/'+response.payslip)
-          $("#downloadpdf").attr('href', '/'+response.payslip)
+          var leave_for = 0.5;
+          _halfDay = halfDay + leave_days;
+          // console.log("Line 523: ", _halfDay)
+        }
+        leave_deduction = parseInt((leave_for * leave_days) * (salary/totalDays));
+      } else {
+        leave_deduction = 0;
+        if (_leave_for == 'F') {
+          var leave_for = 1;
+          _fullDay = fullDay;
+        } else {
+          var leave_for = 0.5;
+          _halfDay = halfDay;
+        }
+      }
+
+      // console.log(`Leave days ${leave_days}, Addition: ${addition_amount}, Deduction : ${deduction_amount}`)
+      
+      if (leave_days < 0 || addition_amount < 0 || deduction_amount < 0 ) {
+        $("#error-message").empty()
+        $("#error-message").append(`<p class="my-0"><b>Please enter positive value.</b></p>`);
+        $("#error-message").fadeIn()
+        $("#error-message").delay(5000).fadeOut();
+        document.getElementById('edit-button').disabled = true;
+      } else {
+        if ((addition_title.trim() == "" && addition_amount !== 0) || (addition_title.trim() !== "" && addition_amount == 0)) {
+          $("#error-message").empty()
+          $("#error-message").append(`<p class="my-0"><b>Please define additional title and additional amount both.</b></p>`);
+          $("#error-message").fadeIn()
+          $("#error-message").delay(5000).fadeOut();
+          document.getElementById('edit-button').disabled = true;
+        } else if ((deduction_title.trim() == "" && deduction_amount !== 0) || (deduction_title.trim() !== "" && deduction_amount == 0)) {
+          $("#error-message").empty()
+          $("#error-message").append(`<p class="my-0"><b>Please define deduction title and deduction amount both.</b></p>`);
+          $("#error-message").fadeIn()
+          $("#error-message").delay(5000).fadeOut();
+          document.getElementById('edit-button').disabled = true;
+        } else {
+          if (document.getElementById('edit-button').disabled == true) {
+            document.getElementById('edit-button').disabled = false;
+          }
+        }
+        if (isNaN(leave_days)) {
+          leave_days = 0;
+        }
+        if (isNaN(addition_amount)) {
+          addition_amount = 0;
+        }
+        if (isNaN(deduction_amount)) {
+          deduction_amount = 0;
+        }
+        // var leave_deduction = ((full_day_leave * 1) + (half_day_leave * 0.5)) * (salary / totalDays) + deduction_amount
+
+        var earning = parseInt((salary + addition_amount) - (leave_deduction + deduction_amount + deducted))
+        // var lossofpay = (full_day_leave * 1) + (half_day_leave * 0.5)
+        var lossofpay = lop + (leave_days*leave_for)
+
+        var dayspayable = totalDays - lossofpay
+
+        $("#full_day").attr('value', _fullDay);
+        $("#half_day").attr('value', _halfDay);
+        $("#earning").attr('value', earning);
+        $("#effective_work_days").attr('value', totalDays);
+        $("#loss_pay_days").attr('value', lossofpay);
+        $("#total_pay_days").attr('value', dayspayable);
+        $("#addition_title").attr('value', addition_title);
+        $("#addition_amount").attr('value',addition_amount);
+        $("#deduction_title").attr('value', deduction_title);
+        $("#deduction_amount").attr('value', deduction_amount);
+        $("#deduction").attr('value', (deducted+leave_deduction+deduction_amount));
+        $("#total_addition").attr('value', addition_amount)
+      }
+    }
+
+    function showTeam(type) {
+    console.log("Type: ", type)
+    if (type == 'update') {
+      console.log("Line 326")
+      let leave_days = document.getElementById("update_leave_days").value;
+      let start_date = document.getElementById("update_leave_start_date").value;
+      var team_2 = document.getElementById("update_team")
+    } else {
+      let leave_days = document.getElementById("leave_days").value;
+      let start_date = document.getElementById("leave_start_date").value;
+      var team_2 = document.getElementById("team2")
+    }
+    
+    if (leave_days) {
+      leave_days = leave_days;
+    } else {
+      leave_days = 1
+    }
+    console.log("leave days: " + leave_days)
+    console.log("Start date: " + start_date)
+    $.ajax({
+      url: "/leave" + '/' + leave_days + '/' + start_date + '/' + '?q=ajax',
+      type: "get",
+      success: function (response) {
+        console.log(response)
+        if (response['employees'] !== 'Not found') {
+          // console.log(response.employees[0].name)
+          $("#team2").empty();
+          response.employees.forEach(function (item) {
+            var name = item.name;
+            var image = item.image;
+            $("#team2").append(`<a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" title="${name}">
+                              <img alt="Image placeholder" src="/${image}">
+                              </a>`)
+          });
+          $("#team2").append(`<span class="ml-2 text-muted" style="display: inline-block;"> ${response.employees.length} teammates on leave during this period</span>`);
+          $("#team1").css('display', 'block')
+        } else {
+          $("#team2").empty();
+          $("#team1").css('display', 'none')
+          console.log(response['employees'])
         }
       },
       error: function (xhr) {
-        alert("request fail", { month });
+        alert("request fail");
       }
     });
   }
-  document.getElementById("payroll11").classList.replace("side-nav", "active-side-nav");
-  document.getElementById("payroll12").style.display = "block";
-  const _card = document.getElementsByClassName('active-month');
-  var card_ = _card[0].id;
-  var cardButton = document.getElementById('month-card'+card_)
-  cardButton.scrollIntoView({behavior: "smooth", block: "center", inline: "center" });
 
-  $('#payrolltabel').on('hidden.bs.modal', function() {
-    const button_ = document.getElementsByClassName('btn-active');
-    console.log("button: "+button_[0].id)
-    var btn_id = button_[0].id.slice(6, button_[0].id.length);
-    const button = document.getElementById('active'+btn_id);
-    button.classList.remove('btn-primary');
-    button.classList.remove('btn-active');
-    button.classList.add('btn-outline-primary');
-    button.setAttribute('id', 'deactive'+btn_id);
-    console.log("ID: "+'deactive'+btn_id)
-  });
-</script>
-{% endblock %}
+    function getpdf(month) {
+      console.log(month)
+      const button_ = document.getElementsByClassName('btn-active');
+      console.log("button: " + button_[0].id)
+      var btn_id = button_[0].id.slice(6, button_[0].id.length);
+      const button = document.getElementById('active' + btn_id);
+      button.classList.remove('btn-primary');
+      button.classList.remove('btn-active');
+      button.classList.add('btn-outline-primary');
+      button.setAttribute('id', 'deactive' + btn_id);
+      console.log("ID: " + 'deactive' + btn_id)
+
+      const _button = document.getElementById('deactive' + month);
+      console.log("_button: " + _button.id)
+      _button.classList.remove('btn-outline-primary');
+      _button.classList.add('btn-primary');
+      _button.classList.add('btn-active');
+      _button.setAttribute('id', 'active' + month);
+      console.log("ID: " + 'active' + month)
+
+      empid = $("#payslippdf").attr('employee_id')
+      year = document.getElementById("yearselect").value
+      $.ajax({
+        url: "/payroll_expenses" + '/' + month + '/' + year + '/',
+        type: "get",
+        data: { 'employee_id': empid },
+        success: function (response) {
+          console.log("Payslip: " + response.payslip)
+          if (response['payslip'] == 'Not found') {
+            $("#payslippdf").css('display', 'none')
+            $("#not_found").css('display', 'block')
+            $("#downloadpdf").attr('href', "")
+          } else {
+            $("#payslippdf").css('display', 'block')
+            $("#error").css('display', 'none')
+            $("#payslippdf").children().attr('src', '/' + response.payslip)
+            $("#downloadpdf").attr('href', '/' + response.payslip)
+          }
+        },
+        error: function (xhr) {
+          alert("request fail", { month });
+        }
+      });
+    }
+    document.getElementById("payroll11").classList.replace("side-nav", "active-side-nav");
+    document.getElementById("payroll12").style.display = "block";
+    const _card = document.getElementsByClassName('active-month');
+    var card_ = _card[0].id;
+    var cardButton = document.getElementById('month-card' + card_)
+    cardButton.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+
+    $('#payrolltabel').on('hidden.bs.modal', function () {
+      const button_ = document.getElementsByClassName('btn-active');
+      console.log("button: " + button_[0].id)
+      var btn_id = button_[0].id.slice(6, button_[0].id.length);
+      const button = document.getElementById('active' + btn_id);
+      button.classList.remove('btn-primary');
+      button.classList.remove('btn-active');
+      button.classList.add('btn-outline-primary');
+      button.setAttribute('id', 'deactive' + btn_id);
+      console.log("ID: " + 'deactive' + btn_id)
+    });
+  </script>
+  {% endblock %}

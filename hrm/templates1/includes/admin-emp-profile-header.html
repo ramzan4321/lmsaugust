@@ -1,0 +1,79 @@
+<body>
+  <div class="container-fluid mt-5">
+    <div class="container p-3 mb-2 bg-default" style="border-radius: 10px; max-width: -webkit-fill-available;">
+      <div class="row">
+        <div class="col-md-3 order-xl-2 pr-0" style="margin-top: 5px; ">
+          <img src="/{{ emp.profile_image }}" style="height:260px;width:260px;"
+            onerror="this.src='../../static/assets/img/brand/default.jpeg'" class="img-thumbnail">
+        </div>
+        <div class="col-md-9 order-xl-2 pl-0">
+          <h1 class="text-white px-4 py-2">{{ emp.name }}</h1>
+          <div class="text-white row px-4">
+            <div class="col-md-4 text-sm"><i class="fa fa-map-marker" aria-hidden="true"></i> &nbsp; {{ emp.address }} |
+              {{ emp.state }}</div>
+            <div class="col-md-5 text-sm"><i class="fa fa-envelope" aria-hidden="true"></i> &nbsp; {{ emp.user.email }}
+            </div>
+            <div class="col-md-3 text-sm"><i class="fa fa-phone" aria-hidden="true"></i> &nbsp; {{ emp.mobile }}</div>
+          </div>
+          <br>
+
+          <hr class="my-2" style="width: 95%;">
+          <div class="text-white row px-4">
+            <div class="col-md-3">
+              <span class="text-muted text-md">DESIGNATION</span>
+              <br>
+
+              <span class="text-md">{{ emp.designation }}</span>
+            </div>
+            <div class="col-md-3">
+              <span class=" text-muted text-md">DEPARTMENT</span>
+              <br>
+              <span class="text-sm">{{ emp.department }}</span>
+            </div>
+            <div class="col-md-3">
+              <span class="text-muted text-md">REPORTING TO</span>
+              <br>
+              <span class="text-md">{{ emp.manager.name }}</span>
+            </div>
+            <div class="col-md-3">
+              <span class="text-muted text-md">EMPLOYEE NO</span>
+              <br>
+              <span class="text-md">{{ emp.user.id }}</span>
+            </div>
+          </div>
+          <br>
+          <br>
+          <br>
+          <div class="row" style="position: absolute; margin-left: 9px; bottom:0;width:90%;">
+            <div class="col-xl-12" id="">
+              <nav class="navbar-expand-lg navbar-light bg-secondary">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+                  aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                  <ul class="navbar-nav">
+                    <li class="nav-item px-5">
+                      <a class="header-nav py-2 mb-2" id="about22" href="/empabout/{{ emp.user.id }}">About <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item px-5">
+                      <a class="header-nav py-2 mb-2" id="profile22" href="/edit_profile/{{ emp.user.id }}">Edit Profile</a>
+                    </li>
+                    <li class="nav-item px-5">
+                      <a class="header-nav py-2 mb-2" id="bank22" href="/empbank/{{ emp.user.id }}">Bank Detail</a>
+                    </li>
+                    <li class="nav-item px-5">
+                      <a class="header-nav py-2 mb-2" id="leave22" href="/leave/{{ emp.id }}">Leaves</a>
+                    </li>
+                    <li class="nav-item px-5">
+                      <a class="header-nav py-2 mb-2" id="payroll22" href="/adminemppayroll/{{ emp.user.id }}">Payroll</a>
+                    </li>
+                  </ul>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

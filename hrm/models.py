@@ -1,3 +1,4 @@
+import calendar
 from datetime import datetime, date, timedelta
 from django.contrib.auth.models import User
 from django.db import models
@@ -19,7 +20,7 @@ class CompanyDetail(SystemField):
     """
     Company Detail modeal help to save company deatils and we can use it for pay slip
     """
-
+    company_id = models.AutoField(primary_key=True, default=1000)
     company_name = models.CharField(max_length=100, null=False, blank=False)
     address = models.CharField(max_length=100, null=False, blank=False)
     pincode = models.IntegerField()
@@ -31,12 +32,37 @@ class CompanyDetail(SystemField):
 
     def get_absolute_url(self):
         return reverse("student_detail", args=[str(self.id)])
+    
+    def save(self, *args, **kwargs):
+        # Override the save method to prevent changing the primary key on updates
+        if self.id is None:
+            self.id = CompanyDetail.objects.order_by('-company_id').first().company_id + 1
+        super(CompanyDetail, self).save(*args, **kwargs)
 
 # class EmployeeManager:
 
+class Designations(SystemField):
+    name = models.CharField(max_length=100, null=False, blank=False)
+
+    def __str__(self):
+        return self.name
+    
+
+class Departments(SystemField):
+    name = models.CharField(max_length=100, null=False, blank=False)
+
+    def __str__(self):
+        return self.name
+
+class Roles(SystemField):
+    name = models.CharField(max_length=100, null=False, blank=False)
+
+    def __str__(self):
+        return self.name
+
 class Employee(SystemField):
     """
-    Employees Detail modeal help create profile of user Where we will also define role of user
+    Employees Detail model help create profile of user Where we will also define role of user
     that will be helpful for create payslip
     """
 
@@ -131,9 +157,9 @@ class EmployeeBankDetail(SystemField):
 
 class PaySlip(SystemField):
     """
+    [effective_work_days, loss_pay_days, total_pay_days, earning_in_words, salary_month_name]
     here we will create payslip for user and save it for each month with basic details
     """
-
     employee_payslip = models.ForeignKey(
         Employee, on_delete=models.CASCADE, related_name="employee_payslip"
     )
@@ -143,8 +169,20 @@ class PaySlip(SystemField):
     leave_taken = models.IntegerField(default=0)
     full_day = models.IntegerField(default=0)
     half_day = models.IntegerField(default=0)
+    addition_title = models.CharField(max_length=30, null=True, blank=True)
+    addition_amount = models.IntegerField(default=0)
+    deduction_title = models.CharField(max_length=30, null=True, blank=True)
+    deduction_amount = models.IntegerField(default=0)
     salary = models.IntegerField(default=0)
     earning = models.IntegerField(default=0)
+    effective_work_days = models.IntegerField(default=0)
+    loss_pay_days = models.FloatField(default=0.0)
+    total_pay_days = models.FloatField(default=0.0)
+    salary_month_name = models.CharField(max_length=20, null=False, blank=False, default="Zero")
+
+
+    admin_confirmation = models.BooleanField(default=False)
+    dispatched_payslip = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return f"{self.employee_payslip}"
@@ -152,9 +190,16 @@ class PaySlip(SystemField):
     def get_username(self):
         return self.employee_payslip
 
+    # @property
+    # def deduction(self):
+    #     return self.salary - self.earning
+
     @property
     def deduction(self):
-        return self.salary - self.earning
+        today = date.today()
+        pre_month = (today.replace(day=1, month=today.month, year=today.year) - timedelta(days=1))
+        total_days = calendar.monthrange(pre_month.year, pre_month.month)[1]
+        return int((self.full_day * 1 + self.half_day * 0.5) * self.salary/total_days + self.deduction_amount)
 
     def process_email(self, subject, message, email_to):
         Mailer(
@@ -177,7 +222,7 @@ class LeaveManagement(models.Model):
     """
     employee_id = models.ForeignKey(
         Employee, on_delete=models.CASCADE, related_name='leaves')
-    leave_reason = models.TextField()
+    leave_reason = models.TextField(max_length=250)
     leave_days = models.IntegerField()
     leave_start_date = models.DateField()
     leave_type = models.CharField(max_length=10, choices=LEAVE_TYPES)

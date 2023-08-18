@@ -2,114 +2,766 @@
 {% block stylesheets %}
 <link rel="stylesheet" type="text/css" href="/static/css/button.css">
 {% endblock stylesheets %}
-  <div class="container-fluid mt--5" style=" border-radius: 10px; height:600px">
-    <div class="row mt-5">
-      <div class="col">
-        <div class="card  shadow mt-4">
-          <div id="employeedetail" class="table-responsive ml-2 mr-2 mt-4" id="tbl-employee" style="height: 585px;">
-            <div class="card-header  border-0">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h3 class="text-dark mb-0">Employee's List</h3>
+<div class="container-fluid mt--5" style=" border-radius: 10px; height:600px">
+
+  <div class="modal fade payslip-edit" tabindex="-1" role="dialog" id="user-modal" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal pl-3 mt-0" style="width: 100%;">
+      <div class="modal-content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card mt-4">
+                <div class="card-header text-center">
+                  <h4>Add New User</h4>
                 </div>
-                <div class="col-4 text-right">
-                  <button type="button" onclick="empForm()" class="btn btn-primary">Create Employee</button>
+                <div class="card-body">
+                  <form method="post" action="/register/">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <ul id="user-info">
+                        <li><span class="text-muted" style="font-size: 12px;"><b>Username: </b> must be 8 characters
+                            long.</span></li>
+                        <li><span class="text-muted" style="font-size: 12px;"><b>Password: </b> must be 8 characters
+                            long and contains both letters and numbers.</span></li>
+                      </ul>
+                      <div class="input-group input-group-alternative mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                        </div>
+                        <input type="text" required class="form-control" placeholder="Username" value="" name="username"
+                          id="id_username">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group input-group-alternative mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                        </div>
+                        <input type="email" required class="form-control" placeholder="Email" value="" name="email"
+                          id="id_email">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group input-group-alternative">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                        </div>
+                        <input type="password" required class="form-control" placeholder="Password" value=""
+                          name="password1" id="id_password1">
+                          <div class="input-group-prepend">
+                            <!-- <span class="input-group-text"> -->
+                              <button type="button" class="input-group-text btn p-1" onclick="hidePassword1('id_password1', 'show_pwd1', 'hide_pwd1')" id="hide_pwd1" style="display: none;">
+                                <img src="../media/eyebuttonblue.png" alt="Submit" width="18" height="10">
+                              </button>
+                              <button type="button" class="input-group-text btn p-1" onclick="showPassword1('id_password1', 'hide_pwd1', 'show_pwd1')" id="show_pwd1" style="display: block;">
+                                <img src="../media/eyebuttonlight.png" alt="Submit" width="18" height="10">
+                              </button>
+                            <!-- </span> -->
+                          </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group input-group-alternative">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                        </div>
+                        <input type="password" required class="form-control" placeholder="Confirm Password" value=""
+                          name="password2" id="id_password2">
+                          <div class="input-group-prepend">
+                            <!-- <span class="input-group-text"> -->
+                              <button type="button" class="input-group-text btn p-1" onclick="hidePassword1('id_password2', 'show_cnf_pwd1', 'hide_cnf_pwd1')" id="hide_cnf_pwd1" style="display: none;">
+                                <img src="../media/eyebuttonblue.png" alt="Submit" width="18" height="10">
+                              </button>
+                              <button type="button" class="input-group-text btn p-1" onclick="showPassword1('id_password2', 'hide_cnf_pwd1', 'show_cnf_pwd1')" id="show_cnf_pwd1" style="display: block;">
+                                <img src="../media/eyebuttonlight.png" alt="Submit" width="18" height="10">
+                              </button>
+                            <!-- </span> -->
+                          </div>
+                      </div>
+                    </div>
+                    <div class="row my-4">
+                      <div class="col-12">
+                        <div class="custom-control custom-control-alternative custom-checkbox">
+                          <input class="custom-control-input" id="customCheckRegister" type="checkbox">
+                          <label class="custom-control-label" for="customCheckRegister">
+                            <span class="text-muted">I agree with the <a href="#!">Privacy Policy</a></span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
                 </div>
               </div>
             </div>
-            <table class="table table-hover table align-items-center  table-flush">
-              <thead class=thead-light>
-                <tr>
-                  <th scope="col">Image</th>
-                  <th scope="col">Username</th>
-                  <th scope="col">Employee</th>
-                  <th scope="col">Department</th>
-                </tr>
-              </thead>
-              <tbody id="employee">
-                {% for result in employee %}
-                <tr>
-                  <th scope="row">
-                    <div class="media align-items-center">
-                      <a class="avatar rounded-circle mr-3">
-                        <img alt="Image placeholder" src="{{ result.profile_image.url }}" onerror="this.src='/media/defaultprofile.jpeg'" >
-                      </a>
-                      <div class="media-body">
-                        <th scope="row">{{ result.user.username }}</th>
-                        <td><a class="text-info nav-link" href="/profile/{{result.id}}">{{ result.name }}</a></td>
-                        <td>{{ result.department }}</td>
-                      </div>
-                    </div>
-                  </th>
-                </tr>
-              {% endfor %}
-              </tbody>
-            </table>
           </div>
         </div>
       </div>
     </div>
-        <div id="empform" style="display: none;" class="card">
+  </div>
+
+  <div class="modal fade payslip-edit" tabindex="-1" role="dialog" id="edit-user-modal"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal pl-3 mt-0" style="width: 100%;">
+      <div class="modal-content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+
+              <div class="card mt-4">
+                <div class="card-header text-center">
+                  <h4>Edit User</h4>
+                </div>
+                <div class="card-body">
+                  <form role="form" action="/edit_registered_user/" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <ul id="user-info">
+                        <li><span class="text-muted" style="font-size: 12px;"><b>Username: </b> must be 8 characters
+                            long.</span></li>
+                        <li><span class="text-muted" style="font-size: 12px;"><b>Password: </b> must be 8 characters
+                            long and contains both letters and numbers.</span></li>
+                      </ul>
+                      <div class="input-group input-group-alternative mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                        </div>
+                        <input type="hidden" id="user-edit-id" name="user-edit-id" value="">
+                        <input type="text" required class="form-control" placeholder="Username" value="" name="username"
+                          id="username">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group input-group-alternative mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                        </div>
+                        <input type="email" required class="form-control" placeholder="Email" value="" name="email"
+                          id="email">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group input-group-alternative">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                        </div>
+                        <input type="password" required class="form-control" placeholder="Password" value=""
+                          name="password1" id="password1">
+                          <div class="input-group-prepend">
+                            <!-- <span class="input-group-text"> -->
+                              <button type="button" class="input-group-text btn p-1" onclick="hidePassword1('password1', 'show_user_pwd1', 'hide_user_pwd1')" id="hide_user_pwd1" style="display: none;">
+                                <img src="../media/eyebuttonblue.png" alt="Submit" width="18" height="10">
+                              </button>
+                              <button type="button" class="input-group-text btn p-1" onclick="showPassword1('password1', 'hide_user_pwd1', 'show_user_pwd1')" id="show_user_pwd1" style="display: block;">
+                                <img src="../media/eyebuttonlight.png" alt="Submit" width="18" height="10">
+                              </button>
+                            <!-- </span> -->
+                          </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group input-group-alternative">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                        </div>
+                        <input type="password" required class="form-control" placeholder="Confirm Password" value=""
+                          name="password2" id="password2">
+                          <div class="input-group-prepend">
+                            <!-- <span class="input-group-text"> -->
+                              <button type="button" class="input-group-text btn p-1" onclick="hidePassword1('password2', 'show_user_cnf_pwd1', 'hide_user_cnf_pwd1')" id="hide_user_cnf_pwd1" style="display: none;">
+                                <img src="../media/eyebuttonblue.png" alt="Submit" width="18" height="10">
+                              </button>
+                              <button type="button" class="input-group-text btn p-1" onclick="showPassword1('password2', 'hide_user_cnf_pwd1', 'show_user_cnf_pwd1')" id="show_user_cnf_pwd1" style="display: block;">
+                                <img src="../media/eyebuttonlight.png" alt="Submit" width="18" height="10">
+                              </button>
+                            <!-- </span> -->
+                          </div>
+                      </div>
+                    </div>
+                    <div class="row my-4">
+                      <div class="col-12">
+                        <div class="custom-control custom-control-alternative custom-checkbox">
+                          <input class="custom-control-input" id="customCheckRegister" type="checkbox">
+                          <label class="custom-control-label" for="customCheckRegister">
+                            <span class="text-muted">I agree with the <a href="#!">Privacy Policy</a></span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-primary mt-4">Submit</button>
+                    </div>
+                  </form>
+                  <!-- <form>
+                <div class="form-group">
+                  <label for="designation_modal"><b>Edit User</b></label>
+                  <input type="hidden" id="desig-edit-id" value="">
+                  <input type="text" class="form-control" id="edit_user_modal" aria-describedby="emailHelp" placeholder="Enter designation" value="">
+                </div>
+                <button onclick="editUser()" class="btn btn-primary">Submit</button>
+              </form> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade payslip-edit" tabindex="-1" role="dialog" id="edit-designation-modal"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm pl-3 mt-0" style="width: 100%;">
+      <div class="modal-content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+
+              <div class="card mt-4">
+                <div class="card-body">
+                  <form>
+                    <div class="form-group">
+                      <label for="designation_modal"><b>Edit Designation</b></label>
+                      <input type="hidden" id="desig-edit-id" value="">
+                      <input type="text" class="form-control" id="edit_designation_modal" aria-describedby="emailHelp"
+                        placeholder="Enter designation" value="">
+                    </div>
+                    <button onclick="editDesignation()" class="btn btn-primary">Submit</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade payslip-edit" tabindex="-1" role="dialog" id="department-modal"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm pl-3 mt-0" style="width: 100%;">
+      <div class="modal-content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card mt-4">
+                <div class="card-body">
+                  <form>
+                    <div class="form-group">
+                      <label for="department_modal"><b>Add Department</b></label>
+                      <input type="text" class="form-control" id="department_modal" aria-describedby="emailHelp"
+                        placeholder="Enter designation">
+                    </div>
+                    <button onclick="addDepartment()" class="btn btn-primary">Submit</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade payslip-edit" tabindex="-1" role="dialog" id="edit-department-modal"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm pl-3 mt-0" style="width: 100%;">
+      <div class="modal-content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card mt-4">
+                <div class="card-body">
+                  <form>
+                    <div class="form-group">
+                      <label for="designation_modal"><b>Edit Department</b></label>
+                      <input type="hidden" id="depart-edit-id" value="">
+                      <input type="text" class="form-control" id="edit_department_modal" aria-describedby="emailHelp"
+                        placeholder="Enter department" value="">
+                    </div>
+                    <button onclick="editDepartment()" class="btn btn-primary">Submit</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade payslip-edit" tabindex="-1" role="dialog" id="designation-modal"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm pl-3 mt-0" style="width: 100%;">
+      <div class="modal-content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card mt-4">
+                <div class="card-body">
+                  <form>
+                    <div class="form-group">
+                      <label for="designation_modal"><b>Add Designation</b></label>
+                      <input type="text" class="form-control" id="designation_modal" aria-describedby="emailHelp"
+                        placeholder="Enter designation">
+                    </div>
+                    <button onclick="addDesignation()" class="btn btn-primary">Submit</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col">
+      <div class="card shadow mt-4">
+        {% if emp_id == "" %}
+        <div id="employeedetail" class="table-responsive ml-2 mr-2 mt-4" id="tbl-employee" style="height: 585px;">
+          {% else %}
+          <div id="employeedetail" class="table-responsive ml-2 mr-2 mt-4" id="tbl-employee" style="height: 585px; display: none;">
+            {% endif %}
           <div class="card-header  border-0">
             <div class="row align-items-center">
               <div class="col-8">
-                <h3 class="text-white mb-0">Create Employee Form</h3>
+                <h3 class="text-dark mb-0">Employee's List</h3>
               </div>
               <div class="col-4 text-right">
-                <button type="button" onclick="showemp()" class="btn btn-primary">Show Employee's List</button>
+                <button type="button" onclick="empForm()" class="btn btn-primary">Create Employee</button>
               </div>
             </div>
           </div>
-          <div class="card-body">
-            <form method="post">
-              {% csrf_token %}
-              <div class="form-group">
-                <label for="id_user">User:</label>
-                <br>
-                <select class="form-control" id="id_user" name="user">
-                  {% for user in users %}
-                    <option value= {{user.pk}} >{{ user.username }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="id_designation">Designation:</label>
-                <br>
-                <input type="text" required class="form-control" id="id_designation" name="designation" maxlength="50">
-              </div>
-              <div class="form-group">
-                <label for="id_department">Department:</label>
-                <br>
-                <input type="text" required class="form-control" id="id_department" name="department" maxlength="50">
-              </div>
-              <div class="form-group">
-                <label for="id_salary">Salary:</label>
-                <br>
-                <input type="number" required class="form-control" id="id_salary" name="salary">
-              </div>
-              <div class="form-group">
-                <label for="id_role">Role:</label>
-                <br>
-                <select required class="form-control" id="id_role" name="role">
-                    <option ></option>
-                    <option value="ADMIN">ADMIN</option>
-                    <option value="EMPLOYEE">EMPLOYEE</option>
-                    <option value="GENERAL_USER">GENERAL USER</option>
-                </select>
-              </div>
-              <button type="submit" class="btn btn-primary">Add Employee</button>
-            </form>
-          </div>
+          <table class="table table-hover table align-items-center  table-flush">
+            <thead class=thead-light>
+              <tr>
+                <th scope="col">Image</th>
+                <th scope="col">Username</th>
+                <th scope="col">Employee</th>
+                <th scope="col">Department</th>
+              </tr>
+            </thead>
+            <tbody id="employee">
+              {% for result in employee %}
+              <tr>
+                <th scope="row">
+                  <div class="media align-items-center">
+                    <a class="avatar rounded-circle mr-3">
+                      <img alt="Image placeholder" src="{{ result.profile_image.url }}"
+                        onerror="this.src='/media/defaultprofile.jpeg'">
+                    </a>
+                    <div class="media-body">
+                      <th scope="row">{{ result.user.username }}</th>
+                      <td><a class="text-info nav-link" href="/profile/{{result.id}}">{{ result.name }}</a></td>
+                      <td>{{ result.department }}</td>
+                    </div>
+                  </div>
+                </th>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
+  </div>
+  {% if emp_id == "" %}
+  <div id="empform" style="display: none;" class="card">
+    {% else %}
+    <div id="empform" style="display: block;" class="card">
+    {% endif %}
+  <div class="card-header border-0">
+    <div class="row align-items-center">
+      <div class="col-8">
+        <h3 class="mb-0">Create Employee</h3>
+      </div>
+      <div class="col-4 text-right">
+        <button type="button" onclick="showemp()" class="btn btn-primary">Show Employee's List</button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="form-row align-items-center">
+
+        <div class="col-sm-2">
+          <label for="id_user">User:</label>
+        </div>
+        <div class="col-sm-8 my-1">
+          <select class="form-control" id="id_user" name="user">
+            <option value="default">Select User</option>
+            {% for user in users %}
+            {% if emp_id == user.pk %}
+            <option value="{{user.pk}}" selected>General User - {{ user.username }}</option>
+            {% else %}
+            <option value="{{user.pk}}">General User - {{ user.username }}</option>
+            {% endif %}
+            {% endfor %}
+            {% for emp in employee %}
+            {% if emp_id == emp.user.pk %}
+            <option value="{{emp.user.pk}}" selected>Employee - {{ emp.user.username }}</option>
+            {% else %}
+            <option value="{{emp.user.pk}}">Employee - {{ emp.user.username }}</option>
+            {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-auto">
+          <button class="btn p-1" onclick="editUserModal()" id="edit-user" disabled>
+            <!-- Use the <img> tag for the image -->
+            <img src="../media/pencil.png" alt="Submit" width="15" height="15">
+          </button>
+          <button class="btn p-1" onclick="openUser()">
+            <!-- Use the <img> tag for the image -->
+            <img src="../media/plus.png" alt="Submit" width="15" height="15">
+          </button>
+          <!-- <input type="text" required class="form-control" id="id_designation" name="designation" maxlength="50"> -->
+        </div>
+
+        <br>
+
+        <div class="col-sm-2">
+          <label for="id_designation">Designation:</label>
+        </div>
+        <div class="col-sm-8">
+          <select required class="form-control my-2" id="id_designation" name="designation" style="width: 100%;">
+            <option value="default">Select Designation</option>
+            {% for designation in designations %}
+            <option value="{{designation}}">{{designation}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-auto">
+          <button class="btn p-1" onclick="editDesignationModal()" id="edit-desig" disabled>
+            <!-- Use the <img> tag for the image -->
+            <img src="../media/pencil.png" alt="Submit" width="15" height="15">
+          </button>
+          <button class="btn p-1" onclick="openDesignation()">
+            <!-- Use the <img> tag for the image -->
+            <img src="../media/plus.png" alt="Submit" width="15" height="15">
+          </button>
+          <!-- <input type="text" required class="form-control" id="id_designation" name="designation" maxlength="50"> -->
+        </div>
+
+        <br>
+
+        <div class="col-sm-2">
+          <label for="id_department">Department:</label>
+        </div>
+
+        <div class="col-sm-8">
+          <select required class="form-control" id="id_department" name="department">
+            <option value="default">Select Department</option>
+            {% for department in departments %}
+            <option value="{{department}}">{{department}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-auto">
+          <button class="btn p-1" id="edit-depart" onclick="editDepartmentModal()" disabled>
+            <!-- Use the <img> tag for the image -->
+            <img src="../media/pencil.png" alt="Submit" width="15" height="15">
+          </button>
+          <button class="btn p-1" onclick="openDepartment()">
+            <!-- Use the <img> tag for the image -->
+            <img src="../media/plus.png" alt="Submit" width="15" height="15">
+          </button>
+          <!-- <input type="text" required class="form-control" id="id_department" name="department" maxlength="50"> -->
+        </div>
+        <br>
+
+        <div class="col-sm-2">
+          <label for="id_role">Role:</label>
+        </div>
+
+        <div class="col-sm-10 mt-1">
+          <select required class="form-control" id="id_role" name="role">
+            <option></option>
+            <option value="ADMIN">ADMIN</option>
+            <option value="EMPLOYEE">EMPLOYEE</option>
+            <option value="GENERAL_USER">GENERAL USER</option>
+          </select>
+        </div>
+        <!-- <div class="col-auto">
+          <button type="submit" class="btn" id="edit-role" disabled>
+            <img src="../media/pencil-edit.png" alt="Submit" width="15" height="15">
+          </button>
+          <button type="submit" class="btn">
+            <img src="../media/plus.png" alt="Submit" width="15" height="15">
+          </button>
+        </div> -->
+
+        <br>
+
+        <div class="col-sm-2">
+          <label for="id_salary">Salary:</label>
+        </div>
+        <div class="col-sm-10 my-1">
+          <input type="number" required class="form-control" id="id_salary" name="salary">
+        </div>
+
+        <div class="col-sm-12 my-2">
+          <button type="submit" class="btn btn-primary">Add Employee</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+</div>
+</div>
 </div>
 
 <script>
+  const desigElement = document.getElementById('id_designation');
+  const editDesig = document.getElementById('edit-desig');
+
+  // Add an event listener to the select element
+  desigElement.addEventListener('change', function () {
+    if (desigElement.value !== "default") {
+      editDesig.disabled = false;
+    } else {
+      editDesig.disabled = true;
+    }
+  });
+
+  const departElement = document.getElementById('id_department');
+  const editDepart = document.getElementById('edit-depart');
+
+  // Add an event listener to the select element
+  departElement.addEventListener('change', function () {
+    if (departElement.value !== "default") {
+      editDepart.disabled = false;
+    } else {
+      editDepart.disabled = true;
+    }
+  });
+
+  const roleElement = document.getElementById('id_role');
+  const editRole = document.getElementById('edit-role');
+
+  // Add an event listener to the select element
+  roleElement.addEventListener('change', function () {
+    if (roleElement.value !== "default") {
+      editRole.disabled = false;
+    } else {
+      editRole.disabled = true;
+    }
+  });
+
+  const userElement = document.getElementById('id_user');
+  const edituser = document.getElementById('edit-user');
+
+  // Add an event listener to the select element
+  userElement.addEventListener('change', function () {
+    if (userElement.value !== "default") {
+      edituser.disabled = false;
+    } else {
+      edituser.disabled = true;
+    }
+  });
+
+
+
+  function editDesignationModal() {
+    const desigElementValue = document.getElementById('id_designation').value;
+    document.getElementById('edit_designation_modal').value = desigElementValue
+    document.getElementById('desig-edit-id').value = desigElementValue
+    $("#edit-designation-modal").modal('show');
+  }
+
+  function editDesignation() {
+    $.ajax({
+      url: "/edit_designation/",
+      type: "get",
+      data: { 'currentDesig': document.getElementById('desig-edit-id').value, 'designation': document.getElementById('edit_designation_modal').value },
+      success: function (response) {
+        if (response['status'] === 'success') {
+          alert("Edited Successfully")
+        } else {
+          alert(response['error'])
+        }
+      },
+      error: function (xhr) {
+        alert("request fail");
+      }
+    })
+  }
+
+
+
+  function openDesignation() {
+    $("#designation-modal").modal('show');
+  }
+
+  function addDesignation() {
+    $.ajax({
+      url: "/add_designation/",
+      type: "get",
+      data: { 'designation': document.getElementById('designation_modal').value },
+      success: function (response) {
+        if (response['status'] === 'success') {
+          alert("Added Successfully")
+        } else {
+          alert(response['error'])
+        }
+      },
+      error: function (xhr) {
+        alert("request fail");
+      }
+    })
+  }
+
+  // ToDo -------------------------------------------------------------
+  function editUserModal() {
+    const userValue = document.getElementById('id_user').value;
+    $.ajax({
+      url: "/get_user_info/",
+      type: "get",
+      data: { 'userid': userValue },
+      success: function (response) {
+        if (response['status'] === 'success') {
+          document.getElementById('username').value = response['username']
+          document.getElementById('user-edit-id').value = response['user_id']
+          document.getElementById('email').value = response['email']
+        } else {
+          alert(response['error'])
+        }
+      },
+      error: function (xhr) {
+        alert("request fail");
+      }
+    })
+    // document.getElementById('username').value = userValue
+    // document.getElementById('user-edit-id').value = userValue
+    $("#edit-user-modal").modal('show');
+  }
+
+  function editUser() {
+    password1 = document.getElementById('password1').value
+    password2 = document.getElementById('password2').value
+    if (password1 !== password2)
+      $.ajax({
+        url: "/edit_user/",
+        type: "get",
+        data: {
+          'currentUser': document.getElementById('user-edit-id').value,
+          'username': document.getElementById('username').value,
+          'password1': document.getElementById('password1').value,
+          'password2': document.getElementById('password2').value
+        },
+        success: function (response) {
+          if (response['status'] === 'success') {
+            alert("Edited Successfully")
+          } else {
+            alert(response['error'])
+          }
+        },
+        error: function (xhr) {
+          alert("request fail");
+        }
+      })
+  }
+
+
+
+  function openUser() {
+    $("#user-modal").modal('show');
+  }
+
+  function addUser() {
+    $.ajax({
+      url: "/add_user/",
+      type: "get",
+      data: { 'designation': document.getElementById('user_modal').value },
+      success: function (response) {
+        if (response['status'] === 'success') {
+          alert("Added Successfully")
+        } else {
+          alert(response['error'])
+        }
+      },
+      error: function (xhr) {
+        alert("request fail");
+      }
+    })
+  }
+
+
+
+  function editDepartmentModal() {
+    console.log("Line 388")
+    const departElementValue = document.getElementById('id_department').value;
+    document.getElementById('edit_department_modal').value = departElementValue
+    document.getElementById('depart-edit-id').value = departElementValue
+    $("#edit-department-modal").modal('show');
+  }
+
+  function editDepartment() {
+    $.ajax({
+      url: "/edit_department/",
+      type: "get",
+      data: { 'currentDepart': document.getElementById('depart-edit-id').value, 'department': document.getElementById('edit_department_modal').value },
+      success: function (response) {
+        if (response['status'] === 'success') {
+          alert("Edited Successfully")
+        } else {
+          alert(response['error'])
+        }
+      },
+      error: function (xhr) {
+        alert("request fail");
+      }
+    })
+  }
+
+
+
+  function openDepartment() {
+    $("#department-modal").modal('show');
+  }
+
+  function addDepartment() {
+    $.ajax({
+      url: "/add_department/",
+      type: "get",
+      data: { 'department': document.getElementById('department_modal').value },
+      success: function (response) {
+        if (response['status'] === 'success') {
+          alert("Added Successfully")
+        } else {
+          alert(response['error'])
+        }
+      },
+      error: function (xhr) {
+        alert("request fail");
+      }
+    })
+  }
+
   function empForm() {
     document.getElementById("empform").style.display = "block";
     document.getElementById("employeedetail").style.display = "none";
 
+  }
+
+  function showPassword1(id, activeBtn, inActiveBtn) {
+    document.getElementById(id).type = "text";
+    document.getElementById(inActiveBtn).style.display = "none";
+    document.getElementById(activeBtn).style.display = "block";
+  }
+
+  function hidePassword1(id, activeBtn, inActiveBtn) {
+    document.getElementById(id).type = "password";
+    document.getElementById(inActiveBtn).style.display = "none";
+    document.getElementById(activeBtn).style.display = "block";
   }
 
   function showemp() {
@@ -118,9 +770,8 @@
   }
   document.getElementById("profile11").classList.replace("side-nav", "active-side-nav");
   document.getElementById("profile12").style.display = "block";
-  document.getElementById("profile22").classList.replace("header-nav", "active-nav");
-
-  $(document).ready(function() {
+  // document.getElementById("profile22").classList.replace("header-nav", "active-nav");
+  $(document).ready(function () {
     const myDiv = $('#tbl-employee');
 
     if (myDiv.height() > 560) {

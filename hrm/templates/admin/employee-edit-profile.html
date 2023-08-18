@@ -3,16 +3,143 @@
 {% block title %} Profile {% endblock title %}
 
 {% block content %}
-
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="/static/css/button.css">
+{% endblock stylesheets %}
 {% if emp %}
 {% include "includes/admin-emp-profile-header.html" %}
 {% endif %}
 
-<head>
+<!-- <head>
     <link rel="stylesheet" type="text/css" href="/static/css/button.css">
   </head>
-<body>
-    <div id="employeedetail" class="container-fluid">
+<body> -->
+<div class="container-fluid mt--5" style="border-radius: 10px; height:600px; padding-top: 50px;">
+    <div class="modal fade payslip-edit" tabindex="-1" role="dialog" id="edit-designation-modal"
+        aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm pl-3 mt-0" style="width: 100%;">
+          <div class="modal-content">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-md-12">
+    
+                  <div class="card">
+                    <!-- <div class="card-header text-center">
+                    <h6>Add Designation</h6>
+                  </div> -->
+                    <div class="card-body">
+                      <form>
+                        <div class="form-group">
+                          <label for="designation_modal"><b>Edit Designation</b></label>
+                          <input type="hidden" id="desig-edit-id" value="">
+                          <input type="text" class="form-control" id="edit_designation_modal" aria-describedby="emailHelp"
+                            placeholder="Enter designation" value="">
+                        </div>
+                        <button onclick="editDesignation()" class="btn btn-primary">Submit</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    
+      <div class="modal fade payslip-edit" tabindex="-1" role="dialog" id="department-modal"
+        aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm pl-3 mt-0" style="width: 100%;">
+          <div class="modal-content">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-md-12">
+    
+                  <div class="card">
+                    <!-- <div class="card-header text-center">
+                      <h6>Add Designation</h6>
+                    </div> -->
+                    <div class="card-body">
+                      <form>
+                        <div class="form-group">
+                          <label for="department_modal"><b>Add Department</b></label>
+                          <input type="text" class="form-control" id="department_modal" aria-describedby="emailHelp"
+                            placeholder="Enter designation">
+                        </div>
+                        <button onclick="addDepartment()" class="btn btn-primary">Submit</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="modal fade payslip-edit" tabindex="-1" role="dialog" id="edit-department-modal"
+        aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm pl-3 mt-0" style="width: 100%;">
+          <div class="modal-content">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-md-12">
+    
+                  <div class="card">
+                    <!-- <div class="card-header text-center">
+                    <h6>Add Designation</h6>
+                  </div> -->
+                    <div class="card-body">
+                      <form>
+                        <div class="form-group">
+                          <label for="designation_modal"><b>Edit Department</b></label>
+                          <input type="hidden" id="depart-edit-id" value="">
+                          <input type="text" class="form-control" id="edit_department_modal" aria-describedby="emailHelp"
+                            placeholder="Enter department" value="">
+                        </div>
+                        <button onclick="editDepartment()" class="btn btn-primary">Submit</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    
+      <div class="modal fade payslip-edit" tabindex="-1" role="dialog" id="designation-modal"
+        aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm pl-3 mt-0" style="width: 100%;">
+          <div class="modal-content">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-md-12">
+    
+                  <div class="card">
+                    <!-- <div class="card-header text-center">
+                  <h6>Add Designation</h6>
+                </div> -->
+                    <div class="card-body">
+                      <form>
+                        <div class="form-group">
+                          <label for="designation_modal"><b>Add Designation</b></label>
+                          <input type="text" class="form-control" id="designation_modal" aria-describedby="emailHelp"
+                            placeholder="Enter designation">
+                        </div>
+                        <button onclick="addDesignation()" class="btn btn-primary">Submit</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div id="employeedetail" style="display: block;">
         <div class="row py-2">
             <div  class="col-md-12">
                 <div class="card">
@@ -27,16 +154,18 @@
                             <input type="text" required class="form-control" value="{{ emp.designation }}" disabled id="name" name="name">
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="account_holder_name" class="col-sm-2 col-form-label">Role:</label>
-                            <div class="col-sm-10">
-                            <input type="text" required class="form-control" value="{{ emp.role }}" disabled id="mobile" name="mobile">
-                            </div>
-                        </div>
+                        
                         <div class="form-group row">
                             <label for="branch_name" class="col-sm-2 col-form-label">Department:</label>
                             <div class="col-sm-10">
                             <input type="text" required class="form-control" value="{{ emp.department }}" disabled id="gender" name="gender">
+                            </div>
+                            
+                        </div>
+                        <div class="form-group row">
+                            <label for="account_holder_name" class="col-sm-2 col-form-label">Role:</label>
+                            <div class="col-sm-10">
+                            <input type="text" required class="form-control" value="{{ emp.role }}" disabled id="mobile" name="mobile">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -60,7 +189,7 @@
             </div>
         </div>
     </div>
-    <div id="employeeform"  class="container-fluid employeeform">
+    <div id="employeeform"  class="employeeform" style="display: none;">
         <div class="row py-2">
             <div  class="col-md-12">
                 <div class="card">
@@ -73,10 +202,59 @@
                         {% csrf_token %}
                         <div class="form-group row">
                             <label for="bank_name" class="col-sm-2 col-form-label">Designation:</label>
-                            <div class="col-sm-10">
-                            <input type="text" required  class="form-control" value="{{ emp.designation }}"  id="designation" name="designation">
+                            <div class="col-sm-8">
+                                <select required class="form-control my-2" id="id_designation" name="designation" style="width: 100%;">
+                                    <option value="default">Select Designation</option>
+                                    {% for designation in designations %}
+                                        {% if emp.designation == designation.name %}
+                                            <option value="{{designation}}" selected>{{designation}}</option>
+                                        {% else %}
+                                            <option value="{{designation}}">{{designation}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            <!-- <input type="text" required  class="form-control" value="{{ emp.designation }}"  id="designation" name="designation"> -->
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn p-1" onclick="editDesignationModal()" id="edit-desig" disabled>
+                                  <!-- Use the <img> tag for the image -->
+                                  <img src="../media/pencil.png" alt="Submit" width="15" height="15">
+                                </button>
+                                <button type="button" class="btn p-1" onclick="openDesignation()">
+                                  <!-- Use the <img> tag for the image -->
+                                  <img src="../media/plus.png" alt="Submit" width="15" height="15">
+                                </button>
+                                <!-- <input type="text" required class="form-control" id="id_designation" name="designation" maxlength="50"> -->
+                              </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label for="bank_account_no" class="col-sm-2 col-form-label">Department:</label>
+                            <div class="col-sm-8">
+                            <select required class="form-control" id="id_department" name="department">
+                                <option value="default">Select Department</option>
+                                {% for depart in departments %}
+                                {% if emp.department == depart.name %}
+                                <option value="{{depart}}" selected>{{depart}}</option>
+                                {% else %}
+                                <option value="{{depart}}">{{depart}}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn p-1" id="edit-depart" onclick="editDepartmentModal()" disabled>
+                                  <!-- Use the <img> tag for the image -->
+                                  <img src="../media/pencil.png" alt="Submit" width="15" height="15">
+                                </button>
+                                <button type="button" class="btn p-1" onclick="openDepartment()">
+                                  <!-- Use the <img> tag for the image -->
+                                  <img src="../media/plus.png" alt="Submit" width="15" height="15">
+                                </button>
+                                <!-- <input type="text" required class="form-control" id="id_department" name="department" maxlength="50"> -->
                             </div>
                         </div>
+
                         <div class="form-group row">
                             <label for="branch_name" class="col-sm-2 col-form-label">Role:</label>
                             <div class="col-sm-10">
@@ -100,12 +278,7 @@
                             </select>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="bank_account_no" class="col-sm-2 col-form-label">Department:</label>
-                            <div class="col-sm-10">
-                            <input type="text" required class="form-control" value="{{ emp.department }}"  id="department" name="department">
-                            </div>
-                        </div>
+
                         <div class="form-group row">
                             <label for="account_holder_name" class="col-sm-2 col-form-label">Salary:</label>
                             <div class="col-sm-10">
@@ -131,9 +304,153 @@
             </div>
         </div>
     </div>
-</body>
+</div>
+<!-- </body> -->
 
 <script>
+
+const desigElement = document.getElementById('id_designation');
+  const editDesig = document.getElementById('edit-desig');
+
+  // Add an event listener to the select element
+  desigElement.addEventListener('change', function () {
+    if (desigElement.value !== "default") {
+      editDesig.disabled = false;
+    } else {
+      editDesig.disabled = true;
+    }
+  });
+
+  const departElement = document.getElementById('id_department');
+  const editDepart = document.getElementById('edit-depart');
+
+  // Add an event listener to the select element
+  departElement.addEventListener('change', function () {
+    if (departElement.value !== "default") {
+      editDepart.disabled = false;
+    } else {
+      editDepart.disabled = true;
+    }
+  });
+
+  function editDesignationModal() {
+    const desigElementValue = document.getElementById('id_designation').value;
+    document.getElementById('edit_designation_modal').value = desigElementValue
+    document.getElementById('desig-edit-id').value = desigElementValue
+    $("#edit-designation-modal").modal('show');
+  }
+
+  function editDesignation() {
+    $.ajax({
+      url: "/edit_designation/",
+      type: "get",
+      data: { 'currentDesig': document.getElementById('desig-edit-id').value, 'designation': document.getElementById('edit_designation_modal').value },
+      success: function (response) {
+        if (response['status'] === 'success') {
+          alert("Edited Successfully")
+        } else {
+          alert(response['error'])
+        }
+      },
+      error: function (xhr) {
+        alert("request fail");
+      }
+    })
+  }
+
+  function openDesignation() {
+    $("#designation-modal").modal('show');
+  }
+
+  function addDesignation() {
+    $.ajax({
+      url: "/add_designation/",
+      type: "get",
+      data: { 'designation': document.getElementById('designation_modal').value },
+      success: function (response) {
+        if (response['status'] === 'success') {
+          alert("Added Successfully")
+        } else {
+          alert(response['error'])
+        }
+      },
+      error: function (xhr) {
+        alert("request fail");
+      }
+    })
+  }
+
+
+  function openUser() {
+    $("#user-modal").modal('show');
+  }
+
+  function addUser() {
+    $.ajax({
+      url: "/add_user/",
+      type: "get",
+      data: { 'designation': document.getElementById('user_modal').value },
+      success: function (response) {
+        if (response['status'] === 'success') {
+          alert("Added Successfully")
+        } else {
+          alert(response['error'])
+        }
+      },
+      error: function (xhr) {
+        alert("request fail");
+      }
+    })
+  }
+
+  function editDepartmentModal() {
+    console.log("Line 388")
+    const departElementValue = document.getElementById('id_department').value;
+    document.getElementById('edit_department_modal').value = departElementValue
+    document.getElementById('depart-edit-id').value = departElementValue
+    $("#edit-department-modal").modal('show');
+  }
+
+  function editDepartment() {
+    $.ajax({
+      url: "/edit_department/",
+      type: "get",
+      data: { 'currentDepart': document.getElementById('depart-edit-id').value, 'department': document.getElementById('edit_department_modal').value },
+      success: function (response) {
+        if (response['status'] === 'success') {
+          alert("Edited Successfully")
+        } else {
+          alert(response['error'])
+        }
+      },
+      error: function (xhr) {
+        alert("request fail");
+      }
+    })
+  }
+
+  function openDepartment() {
+    $("#department-modal").modal('show');
+  }
+
+  function addDepartment() {
+    $.ajax({
+      url: "/add_department/",
+      type: "get",
+      data: { 'department': document.getElementById('department_modal').value },
+      success: function (response) {
+        if (response['status'] === 'success') {
+          alert("Added Successfully")
+        } else {
+          alert(response['error'])
+        }
+      },
+      error: function (xhr) {
+        alert("request fail");
+      }
+    })
+  }
+
  function editForm() {
     document.getElementById("employeedetail").style.display = "none";
     document.getElementById("employeeform").style.display = "block";
